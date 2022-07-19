@@ -47,7 +47,6 @@ const OrderSlice = createSlice({
       if (state.delivery && payload) {
         if (payload.carrier_id === state.delivery.carrier_id) return
       }
-
       state.delivery = payload
     },
 
@@ -78,7 +77,6 @@ const OrderSlice = createSlice({
 })
 
 export default OrderSlice.reducer
-
 export const {
   setAddress,
   setPromotionLineList,

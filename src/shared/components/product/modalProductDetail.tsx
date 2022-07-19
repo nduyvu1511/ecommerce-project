@@ -7,11 +7,7 @@ import {
   mergeProductAndProductDetail,
 } from "@/helper"
 import { Product, ProductDetail as IProductDetail } from "@/models"
-import {
-  setAttributeList,
-  setProduct as setProductStore,
-  setOpenModalProduct,
-} from "@/modules"
+import { setAttributeList, setProduct as setProductStore, setOpenModalProduct } from "@/modules"
 import productApi from "@/services/productApi"
 import { memo, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
@@ -23,11 +19,10 @@ import { ProductDetail } from "./productDetail"
 export const ModalProductDetail = memo(function ModalProductDetailChild() {
   const dispatch = useDispatch()
   const { isOpenModalProduct } = useSelector((state: RootState) => state.common)
-  const { product: productProps } = useSelector(
-    (state: RootState) => state.product
+  const { product: productProps } = useSelector((state: RootState) => state.product)
+  const { userInfo: { id: partner_id = 0 } = { userInfo: undefined } } = useSelector(
+    (state: RootState) => state.user
   )
-  const { userInfo: { id: partner_id = 0 } = { userInfo: undefined } } =
-    useSelector((state: RootState) => state.user)
 
   const [product, setProduct] = useState<IProductDetail | null>(null)
   const [isLoading, setLoading] = useState<boolean>(false)
@@ -71,7 +66,7 @@ export const ModalProductDetail = memo(function ModalProductDetailChild() {
 
   useEffect(() => {
     return () => {
-      dispatch(setProductStore(null))
+      dispatch(setProductStore(undefined))
     }
   }, [])
 

@@ -5,34 +5,57 @@ import { RootState } from "@/core/store"
 import { Payment as IPayment } from "@/models"
 import { setPayment } from "@/modules"
 import { API_URL } from "@/services"
+import { useRouter } from "next/router"
 import { useDispatch, useSelector } from "react-redux"
 import { notify } from "reapop"
-import { useOrder } from "shared/hook"
+import { useOrder, usePayment } from "shared/hook"
 
 interface PaymentProps {
   paymentList: IPayment[]
 }
 
 export const Payment = ({ paymentList }: PaymentProps) => {
+  const router = useRouter()
   const dispatch = useDispatch()
-  const { payment, address, delivery } = useSelector((state: RootState) => state.order)
+  const { token } = useSelector((state: RootState) => state.user)
+  const { payment, address, delivery, productList } = useSelector((state: RootState) => state.order)
   const { updateOrderDraft } = useOrder()
+  const { orderDraft } = useSelector((state: RootState) => state.order)
+  const { createPayment } = usePayment(false)
 
   // Functions
-  const handleAddPayment = (paymentProps: IPayment) => {
+  const handleAddPayment = async (paymentProps: IPayment) => {
+    if (!orderDraft?.order_id) return
     if (!delivery) {
       dispatch(notify("Bạn cần phải chọn phương thức vận chuyển trước!", "warning"))
       return
     }
-
-    if (paymentProps?.acquirer_id !== payment?.acquirer_id) {
-      updateOrderDraft({
-        partner_shipping_id: address?.id,
-        payment_term_id: paymentProps.acquirer_id,
-        handleSuccess: () => {
-          dispatch(setPayment(paymentProps))
+    if (paymentProps.provider === "vnpay") {
+      createPayment(
+        {
+          sale_order_id: orderDraft.order_id,
+          token,
+          acquirer_id: paymentProps.acquirer_id,
+          returned_url: `${process.env.NEXT_PUBLIC_DOMAIN_URL}/checking-checkout-status?sale_order_id=${orderDraft.order_id}`,
         },
-      })
+        (data: any) => {
+          router.push({
+            query: { sale_order_id: orderDraft.order_id },
+          })
+          window.open(data.vnpay_payment_url, "name", "height=600,width=800")?.focus()
+          // setToSessionStorage(COMPOUNDING_VNPAY_CODE, data.vnpay_code)
+        }
+      )
+    } else {
+      if (paymentProps?.acquirer_id !== payment?.acquirer_id) {
+        updateOrderDraft({
+          partner_shipping_id: address?.id,
+          acquirer_id: paymentProps.acquirer_id,
+          handleSuccess: () => {
+            dispatch(setPayment(paymentProps))
+          },
+        })
+      }
     }
   }
 
@@ -59,7 +82,7 @@ export const Payment = ({ paymentList }: PaymentProps) => {
                 >
                   <div className="payment__order__list-item-content">
                     <img
-                      src={item?.image_url ? `${API_URL}${item?.image_url.url || ""}` : companyIcon}
+                      src={item?.image_url ? `${API_URL}${item?.image_url || ""}` : companyIcon}
                       alt=""
                     />
                     <p>{item.name}</p>

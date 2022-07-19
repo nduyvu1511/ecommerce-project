@@ -18,6 +18,7 @@ export const HomeCategory = () => {
       path="/category"
       name="Danh mục sản phẩm"
       isLoading={isValidating && !isArrayHasValue(parentCategories)}
+      showBtn={false}
     >
       <Swiper
         modules={[Navigation]}

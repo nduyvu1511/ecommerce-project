@@ -1,16 +1,10 @@
 import { AddressOrderItem } from "@/components"
 import { RootState } from "@/core/store"
 import { ShippingAddress } from "@/models"
-import {
-  setAddress,
-  setDelivery,
-  setPayment,
-  setOpenModalAddressForm,
-} from "@/modules"
+import { setAddress, setDelivery, setOpenModalAddressForm, setPayment } from "@/modules"
 import Link from "next/link"
-import React, { useState } from "react"
+import { useState } from "react"
 import { HiPlus } from "react-icons/hi"
-import { IoLocationSharp } from "react-icons/io5"
 import { MdKeyboardArrowUp } from "react-icons/md"
 import { useDispatch, useSelector } from "react-redux"
 import { useDelivery, useOrder } from "shared/hook"
@@ -28,7 +22,7 @@ export const AddressOrder = ({ addressList }: AddressOrderProps) => {
     delivery,
     payment,
   } = useSelector((state: RootState) => state.order)
-  const [isShowAddress, setShowAddress] = useState<boolean>(() => !addressOrder)
+  const [isShowAddress, setShowAddress] = useState<boolean>(!addressOrder)
 
   const handleSetOrderAddress = (address: ShippingAddress) => {
     if (addressOrder?.id !== address.id) {
@@ -36,7 +30,6 @@ export const AddressOrder = ({ addressList }: AddressOrderProps) => {
         partner_shipping_id: address.id,
         handleSuccess: () => {
           dispatch(setAddress(address))
-
           if (delivery) {
             dispatch(setDelivery(undefined))
             mutate()
@@ -54,10 +47,7 @@ export const AddressOrder = ({ addressList }: AddressOrderProps) => {
     <div className="checkout__address checkout-item">
       <div className="checkout__address-top">
         <div className="checkout__address-header">
-          <h3 className="checkout-heading">
-            <IoLocationSharp />
-            Địa chỉ nhận hàng
-          </h3>
+          <h3 className="checkout-heading">Địa chỉ nhận hàng</h3>
 
           <div className="checkout__address-header-actions">
             <button
@@ -78,16 +68,11 @@ export const AddressOrder = ({ addressList }: AddressOrderProps) => {
           {addressOrder ? (
             <AddressOrderItem readOnly address={addressOrder} />
           ) : (
-            <p className="checkout__address--no-address">
-              Vui lòng chọn địa chỉ giao hàng
-            </p>
+            <p className="checkout__address--no-address">Vui lòng chọn địa chỉ giao hàng</p>
           )}
 
           {addressList?.length > 0 ? (
-            <button
-              onClick={() => setShowAddress(!isShowAddress)}
-              className="btn-reset"
-            >
+            <button onClick={() => setShowAddress(!isShowAddress)} className="btn-reset">
               Thay đổi
             </button>
           ) : null}

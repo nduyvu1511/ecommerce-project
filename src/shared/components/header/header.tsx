@@ -3,7 +3,7 @@ import { accountHeaderOptionList } from "@/container"
 import { RootState } from "@/core/store"
 import {
   clearOrderData,
-  logOut,
+  logout,
   setOpenLoginModal,
   setOpenNavLeftModal,
   setOpenSearchModal,
@@ -28,14 +28,13 @@ import { navLinks } from "./data"
 export const Header = () => {
   const dispatch = useDispatch()
   const router = useRouter()
-  const { token, userInfo: { avatar = "" } = { userInfo: undefined } } =
-    useSelector((state: RootState) => state.user)
+  const { token, userInfo: { avatar = "" } = { userInfo: undefined } } = useSelector(
+    (state: RootState) => state.user
+  )
   const { isOpen: isOpenSearchResult, keyword } = useSelector(
     (state: RootState) => state.product.search
   )
-  const { isOpen: isOpenSearchHistory } = useSelector(
-    (state: RootState) => state.search.history
-  )
+  const { isOpen: isOpenSearchHistory } = useSelector((state: RootState) => state.search.history)
   const { carts } = useCartOrder(true)
   const { asPath, pathname } = useRouter()
   const [openCartModal, setOpenCartModal] = useState<boolean>(false)
@@ -84,17 +83,13 @@ export const Header = () => {
                   >
                     {openNotiModal ? (
                       <div className="header__notification-modal-wrapper">
-                        {token ? (
-                          <p className="notification-title">
-                            Thông báo mới nhận
-                          </p>
-                        ) : null}
+                        {/* {token ? <p className="notification-title">Thông báo mới nhận</p> : null} */}
                         <Notification />
-                        {token ? (
+                        {/* {token ? (
                           <Link passHref href="/account/notifications">
                             <p className="notification__see-btn">Xem tất cả</p>
                           </Link>
-                        ) : null}
+                        ) : null} */}
                       </div>
                     ) : null}
                   </div>
@@ -149,13 +144,7 @@ export const Header = () => {
             <div className="header__main-top-logo-wrapper">
               <Link passHref href="/">
                 <div className="header__main-top-logo image-container cursor-pointer">
-                  <Image
-                    className="image"
-                    src={logo}
-                    alt=""
-                    quality={50}
-                    layout="fill"
-                  />
+                  <Image className="image" src={logo} alt="" quality={50} layout="fill" />
                 </div>
               </Link>
             </div>
@@ -202,7 +191,7 @@ export const Header = () => {
                         <li
                           onClick={() => {
                             if (!item.path) {
-                              dispatch(logOut())
+                              dispatch(logout())
                               dispatch(clearOrderData())
                             }
                           }}
@@ -220,8 +209,7 @@ export const Header = () => {
               </div>
 
               {/* cart */}
-              {router.pathname === "/checkout" ||
-              router.pathname === "/cart" ? null : (
+              {router.pathname === "/checkout" || router.pathname === "/cart" ? null : (
                 <div
                   onMouseMove={() => {
                     setOpenCartModal(true)

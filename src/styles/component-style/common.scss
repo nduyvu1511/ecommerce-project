@@ -334,10 +334,73 @@
   background-image: linear-gradient(rgba(255, 255, 255, 0), rgb(255, 255, 255));
 }
 
-.login__page {
-  background-color: $bg-primary-opacity;
+.static__page-container {
+  background-color: $bg-gray;
+  padding-bottom: 30px;
 
-  &-form {
-    box-shadow: $box-shadow-2;
+  & h1 {
+    @include style-text(600, 2.4rem, 3.4rem, $heading-color);
+    margin-bottom: 20px;
+    margin-top: 10px;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .static__page {
+    & table {
+      border-collapse: collapse;
+      & th {
+        padding: 20px;
+        @include style-text(600, 1.5rem, 2.6rem, $text-color);
+        text-align: left;
+      }
+
+      & td {
+        @include style-text(500, 1.3rem, 2rem, $text-color);
+        padding: 14px 20px;
+      }
+
+      & th,
+      & td {
+        border: 1px solid $border-color-1;
+      }
+    }
+
+    & ul {
+      margin-left: 20px;
+
+      & li {
+        @include style-text(500, 1.4rem, 2.2rem, $text-color);
+        margin-bottom: 4px;
+      }
+    }
+
+    & p {
+      @include style-text(500, 1.4rem, 2.6rem, $text-color);
+    }
+
+    & h3 {
+      @include style-text(500, 1.7rem, 2.5rem, $text-color);
+      margin-bottom: 10px;
+    }
+
+    & h2 {
+      @include style-text(600, 1.8rem, 2.6rem, $primary-color);
+      margin-bottom: 10px;
+    }
+
+    & h4 {
+      @include style-text(500, 1.6rem, 2.4rem, $text-color);
+      margin-bottom: 10px;
+    }
+
+    & h5 {
+      @include style-text(500, 1.5rem, 2.3rem, $text-color);
+      margin-bottom: 10px;
+    }
+
+    & div {
+      margin-bottom: 20px;
+    }
   }
 }

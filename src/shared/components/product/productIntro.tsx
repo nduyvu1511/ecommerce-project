@@ -6,7 +6,7 @@ import {
   changeAttributeItem,
   setOpenChatMobile,
   setOpenScreenLoading,
-  toggleShowCompareModal
+  toggleShowCompareModal,
 } from "@/modules"
 import { API_URL } from "@/services"
 import Image from "next/image"
@@ -213,7 +213,7 @@ export const ProductIntro = ({ product, type }: IProductIntro) => {
               </button>
             ) : null}
 
-            {type === "detail" ? (
+            {/* {type === "detail" ? (
               <button
                 onClick={() => dispatch(setOpenChatMobile(true))}
                 className="product__intro-shop-btn-sm product__intro-shop-chat-btn"
@@ -221,7 +221,7 @@ export const ProductIntro = ({ product, type }: IProductIntro) => {
                 <RiMessage2Fill />
                 <span>Nhắn tin</span>
               </button>
-            ) : null}
+            ) : null} */}
           </div>
         ) : null}
 

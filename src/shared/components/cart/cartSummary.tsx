@@ -37,13 +37,13 @@ export const CartSummary = ({ isShowPromotion, type }: CartTotalProps) => {
     } else {
       if (!orderDraft) {
         createOrderDraft({
-          handleSuccess: () => {
-            router.push("/checkout")
+          handleSuccess: (sale_order_id) => {
+            router.push(`/checkout`)
           },
           showLoading: true,
         })
       } else {
-        router.push("/checkout")
+        router.push(`/checkout`)
       }
     }
   }
@@ -150,7 +150,7 @@ export const CartSummary = ({ isShowPromotion, type }: CartTotalProps) => {
                   </div>
                 ) : null}
 
-                {/* {(orderDraft?.amount_tax || 0) > 0 ? (
+                {(orderDraft?.amount_tax || 0) > 0 ? (
                   <div className="cart__body-total-subtotal">
                     <p className="cart__body-total-subtotal-title">
                       {language === "vni" ? "Thuế" : "Tax"}:
@@ -159,7 +159,7 @@ export const CartSummary = ({ isShowPromotion, type }: CartTotalProps) => {
                       {formatMoneyVND(orderDraft?.amount_tax || 0)}
                     </p>
                   </div>
-                ) : null} */}
+                ) : null}
 
                 {delivery?.shipping_fee !== undefined ? (
                   <div className="cart__body-total-subtotal">
@@ -182,7 +182,8 @@ export const CartSummary = ({ isShowPromotion, type }: CartTotalProps) => {
                   <span className="cart__body-total-price">
                     {formatMoneyVND(
                       getTotalPrice(productList) +
-                        (delivery?.shipping_fee || 0) -
+                        (delivery?.shipping_fee || 0) +
+                        (orderDraft?.amount_tax || 0) -
                         getTotalPromotion()
                     )}
                   </span>
@@ -193,7 +194,7 @@ export const CartSummary = ({ isShowPromotion, type }: CartTotalProps) => {
             <div className="cart__summary-footer">
               {router.pathname === "/cart" ? (
                 <button
-                  onClick={handleRedirectToCheckout}
+                  onClick={() => handleRedirectToCheckout()}
                   className={`btn-primary cart__summary-footer-btn ${
                     !productList || !isArrayHasValue(productList) ? "opacity-50" : ""
                   }`}

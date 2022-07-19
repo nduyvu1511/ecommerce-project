@@ -1,10 +1,10 @@
 import { RootState } from "@/core/store"
 import { ShippingAddress } from "@/models"
 import {
-  setAddress,
+  setAddress as setOrderAddress,
   setAddressDefault,
   setAddressForm,
-  setOpenModalAddressForm,
+  setOpenModalAddressForm
 } from "@/modules"
 import { useRef, useState } from "react"
 import { AiFillStar } from "react-icons/ai"
@@ -30,9 +30,7 @@ export const AddressItem = ({ isActive, address }: IAddressItem) => {
     userInfo: { id: partner_id = 0 } = { userInfo: undefined },
     addressDefault,
   } = useSelector((state: RootState) => state.user)
-  const { address: addressOrder } = useSelector(
-    (state: RootState) => state.order
-  )
+  const { address: addressOrder } = useSelector((state: RootState) => state.order)
 
   const [openOption, setOpenOption] = useState<boolean>(false)
 
@@ -41,12 +39,12 @@ export const AddressItem = ({ isActive, address }: IAddressItem) => {
     if (addressDefault?.id === address.id) {
       dispatch(setAddressDefault(undefined))
       if (addressOrder?.id === addressDefault.id) {
-        dispatch(setAddress(undefined))
+        dispatch(setOrderAddress(undefined))
       }
     } else {
       dispatch(setAddressDefault(address))
       if (addressOrder?.id !== address.id) {
-        dispatch(setAddress(address))
+        dispatch(setOrderAddress(address))
       }
     }
     setOpenOption(false)

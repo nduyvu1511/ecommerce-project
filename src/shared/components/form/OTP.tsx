@@ -5,13 +5,13 @@ import { RootState } from "@/core/store"
 import {
   clearAuthData,
   setCurrentToken,
-  setToken,
-  setUserInfo,
-  setValidateCreatePasswordOTP,
   setOpenLoginModal,
   setOpenLoginSMSModal,
   setOpenOtpLoginModal,
   setOpenScreenLoading,
+  setToken,
+  setUserInfo,
+  setValidateCreatePasswordOTP,
 } from "@/modules"
 import userApi from "@/services/userApi"
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth"

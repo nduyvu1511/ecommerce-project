@@ -44,26 +44,20 @@ export const ProductSaleItem = ({
             <div className="home__heading-text">
               <div className="home__heading-text-sale">
                 <h3>{productSale?.deal_name || "Flash sale"}</h3>
-                <Countdown
-                  days={days}
-                  hours={hours}
-                  minutes={minutes}
-                  seconds={seconds}
-                />
+                <Countdown days={days} hours={hours} minutes={minutes} seconds={seconds} />
               </div>
               <p>
                 {language === "vni"
-                  ? productSale?.deals_title ||
-                    "Đừng bỏ lỡ nhưng ưu đãi mới nhất"
+                  ? productSale?.deals_title || "Đừng bỏ lỡ nhưng ưu đãi mới nhất"
                   : productSale?.deals_title || `Don't miss the latest offers`}
               </p>
             </div>
-            <Link passHref href={`/shop?type_get=sale`}>
+            {/* <Link passHref href={`/products/top?type_get=sale`}>
               <div className="home__heading-btn cursor-pointer">
                 <p>{language === "vni" ? "Xem tất cả" : "View All"} </p>
                 <CgArrowLongRight />
               </div>
-            </Link>
+            </Link> */}
           </div>
           <Swiper
             modules={[Navigation]}

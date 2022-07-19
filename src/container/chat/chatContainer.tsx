@@ -1,13 +1,9 @@
 import { messageIcon } from "@/assets"
 import { ChatDesktop, ChatMobile } from "@/components"
 import { RootState } from "@/core/store"
-import {
-  setMessagesUnreadCount,
-  setOpenChatDesktop,
-  setOpenLoginModal,
-} from "@/modules"
+import { setMessagesUnreadCount, setOpenChatDesktop, setOpenLoginModal } from "@/modules"
 import chatApi from "@/services/chatApi"
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useAuth } from "shared/hook"
 
@@ -15,11 +11,10 @@ const ChatContainer = () => {
   const dispatch = useDispatch()
   const { token } = useSelector((state: RootState) => state.user)
   const [isAuth, setAuth] = useState<boolean>(false)
-  const { isExpandChatModal, isOpenChatDesktop, isOpenChatMobile } =
-    useSelector((state: RootState) => state.chatModal)
-  const { currentChannel, messagesUnreadCount } = useSelector(
-    (state: RootState) => state.channel
+  const { isExpandChatModal, isOpenChatDesktop, isOpenChatMobile } = useSelector(
+    (state: RootState) => state.chatModal
   )
+  const { currentChannel, messagesUnreadCount } = useSelector((state: RootState) => state.channel)
   const { getUserInfo } = useAuth()
 
   useEffect(() => {
@@ -51,9 +46,7 @@ const ChatContainer = () => {
   return (
     <section className="chat-container">
       <button
-        onClick={() =>
-          dispatch(!isAuth ? setOpenLoginModal(true) : setOpenChatDesktop(true))
-        }
+        onClick={() => dispatch(!isAuth ? setOpenLoginModal(true) : setOpenChatDesktop(true))}
         className="chat-btn"
       >
         {messageIcon}Chat
@@ -62,9 +55,9 @@ const ChatContainer = () => {
 
       {isOpenChatDesktop ? (
         <div
-          className={`chat__modal ${
-            currentChannel?.channel_id ? "chat__modal-expand" : ""
-          } ${isExpandChatModal ? "chat__modal-full" : ""}`}
+          className={`chat__modal ${currentChannel?.channel_id ? "chat__modal-expand" : ""} ${
+            isExpandChatModal ? "chat__modal-full" : ""
+          }`}
         >
           <ChatDesktop />
         </div>

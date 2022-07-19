@@ -23,16 +23,14 @@ interface ProductSWR {
 
 const useProduct = ({ params, key, shouldFetch = true }: Props): ProductSWR => {
   const dispatch = useDispatch()
-
-  const { userInfo: { id: partner_id = 0 } = { userInfo: undefined } } =
-    useSelector((state: RootState) => state.user)
+  const { userInfo } = useSelector((state: RootState) => state.user)
   const { data, error, isValidating, mutate } = useSWR(
     key,
     key === "products_search" || !shouldFetch
       ? null
       : () =>
           productApi
-            .getProductList({ ...params, partner_id })
+            .getProductList({ ...params, partner_id: userInfo?.id || 0 })
             .then((res: any) => res?.result),
     {
       revalidateOnFocus: false,
@@ -44,9 +42,7 @@ const useProduct = ({ params, key, shouldFetch = true }: Props): ProductSWR => {
     if (isArrayHasValue(data)) {
       mutate(
         [...data].map((item: Product) =>
-          item.product_prod_id === product_id
-            ? { ...item, wishlist: !item.wishlist }
-            : item
+          item.product_prod_id === product_id ? { ...item, wishlist: !item.wishlist } : item
         ),
         false
       )
@@ -57,7 +53,7 @@ const useProduct = ({ params, key, shouldFetch = true }: Props): ProductSWR => {
     dispatch(setSearchingStatus(true))
     const data: any = await productApi.getProductList({
       keyword: value,
-      partner_id: partner_id || 0,
+      partner_id: userInfo?.id || 0,
     })
     dispatch(setSearchingStatus(false))
     mutate(data?.result || [], false)
@@ -78,4 +74,3 @@ const useProduct = ({ params, key, shouldFetch = true }: Props): ProductSWR => {
 }
 
 export { useProduct }
-

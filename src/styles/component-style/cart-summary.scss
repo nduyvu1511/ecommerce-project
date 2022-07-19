@@ -299,7 +299,6 @@
 
 .cart__summary-footer {
   padding-top: 1rem;
-  background-color: $primary-color-opacity;
   display: none;
   @include responsive(xl-screen) {
     @include flex(space-between, center);

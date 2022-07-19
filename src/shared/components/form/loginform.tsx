@@ -2,14 +2,14 @@ import { AuthContainer } from "@/container"
 import { loginSchema } from "@/core/schema"
 import { getFromSessionStorage } from "@/helper"
 import { ILogin } from "@/models"
-import { setToken, setUserInfo, setOpenLoginModal, setOpenOtpLoginModal } from "@/modules"
+import { setOpenLoginModal, setOpenOtpLoginModal, setToken, setUserInfo } from "@/modules"
 import { Field, Form, Formik } from "formik"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { IoClose } from "react-icons/io5"
 import { RiEyeCloseLine, RiEyeFill } from "react-icons/ri"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import { useAuth } from "shared/hook"
 
 interface LoginFormProps {
@@ -21,6 +21,10 @@ export const LoginForm = ({ view }: LoginFormProps) => {
   const dispatch = useDispatch()
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const { loginWithPassword, getUserInfo } = useAuth()
+
+  useEffect(() => {
+    ;(document.querySelector(".form-item-input") as HTMLInputElement).focus()
+  }, [])
 
   const handleLogin = (data: ILogin) => {
     loginWithPassword(data, (token) => {

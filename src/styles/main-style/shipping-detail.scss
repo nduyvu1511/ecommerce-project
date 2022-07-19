@@ -1,14 +1,10 @@
 .shipping__detail {
   &-list {
     list-style: none;
-    grid-gap: 0.8rem;
-
-    @include responsive(lg-screen) {
-      grid-gap: 2rem;
-    }
+    grid-gap: 10px;
 
     &-item {
-      border-radius: 2px;
+      border-radius: 4px;
       border: 1px solid $border-color-1;
       padding: 1rem;
       position: relative;

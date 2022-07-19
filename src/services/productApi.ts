@@ -53,7 +53,7 @@ const productApi = {
   },
 
   getBanners: (params?: GetBannerParams) => {
-    return axiosClient.post("/v3.0/interface/get_image", {
+    return axiosClient.post("/api/v3.0/interface/get_image", {
       params,
     })
   },

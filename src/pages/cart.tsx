@@ -63,7 +63,6 @@ const Cart = () => {
         </Link>
       </div>
     )
-
   return (
     <OrderContainer isShowPromotion={true} headerTitle={`Giỏ hàng (${productList?.length || 0})`}>
       <section className="cart__container">

@@ -5,7 +5,9 @@ import {
   ProductDetailLoading,
   ProductItem,
   ProductTabs,
+  Seo,
 } from "@/components"
+import { RootState } from "@/core/store"
 import {
   getAttributeList,
   getFromLocalStorage,
@@ -15,25 +17,15 @@ import {
   mergeProductAndProductDetail,
 } from "@/helper"
 import { MainLayout } from "@/layout"
-import {
-  BreadcrumbItem,
-  Category,
-  Product,
-  ProductDetail as IProductDetail,
-} from "@/models"
-import { setAttributeList, setProduct, setOpenCartModal } from "@/modules"
+import { BreadcrumbItem, Category, Product, ProductDetail as IProductDetail } from "@/models"
+import { setAttributeList, setOpenCartModal, setProduct } from "@/modules"
 import productApi from "@/services/productApi"
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { BiCart } from "react-icons/bi"
-import { useDispatch } from "react-redux"
-import {
-  useCartOrder,
-  useProductDetail,
-  useReview,
-  useWishlist,
-} from "shared/hook"
+import { useDispatch, useSelector } from "react-redux"
+import { useCartOrder, useProductDetail, useReview, useWishlist } from "shared/hook"
 import { Navigation } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/react"
 
@@ -41,14 +33,15 @@ interface ProduductDetailPageProps {
   product: IProductDetail
 }
 
-const ProductDetailPage = ({ product }: ProduductDetailPageProps) => {
+const ProductDetailPage = ({ product: productProps }: ProduductDetailPageProps) => {
   const dispatch = useDispatch()
   const router = useRouter()
   const { carts } = useCartOrder()
   const language = "vni"
+  const { userInfo } = useSelector((state: RootState) => state.user)
   useWishlist(true)
-  const { product: productDetail, clearProductDetail } = useProductDetail({
-    product,
+  const { product, clearProductDetail } = useProductDetail({
+    product: productProps,
   })
   const { clearComments } = useReview({
     shouldFetch: false,
@@ -67,14 +60,15 @@ const ProductDetailPage = ({ product }: ProduductDetailPageProps) => {
   useEffect(() => {
     if (router.query?.productId && product?.category?.id) {
       productApi
-        .getProductList({ category_id: Number(product.category.id), limit: 12 })
+        .getProductList({
+          category_id: Number(product.category.id),
+          limit: 12,
+          partner_id: userInfo?.id || 0,
+        })
         .then((res: any) => {
           const products: Product[] = res.result
-          document.title = product?.name || ""
           setRelatedProducts(
-            [...products].filter(
-              (item) => item.product_tmpl_id !== product.product_tmpl_id
-            )
+            [...products].filter((item) => item.product_tmpl_id !== product.product_tmpl_id)
           )
         })
     }
@@ -99,7 +93,7 @@ const ProductDetailPage = ({ product }: ProduductDetailPageProps) => {
 
   // assign false to ref if the product detail page is unmount
   useEffect(() => {
-    if (!isObjectHasValue(product)) return
+    if (!product || !isObjectHasValue(product)) return
 
     dispatch(setProduct(product))
     const attributeList = getAttributeList(product)
@@ -109,7 +103,7 @@ const ProductDetailPage = ({ product }: ProduductDetailPageProps) => {
 
     return () => {
       clearProductDetail()
-      dispatch(setProduct(null))
+      dispatch(setProduct(undefined))
       clearComments()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -121,7 +115,7 @@ const ProductDetailPage = ({ product }: ProduductDetailPageProps) => {
 
     if (isArrayHasValue(viewedproducts)) {
       const existProduct = viewedproducts.find(
-        (pro) => pro.product_tmpl_id === product.product_tmpl_id
+        (pro) => pro.product_tmpl_id === product?.product_tmpl_id
       )
 
       if (existProduct) {
@@ -132,7 +126,7 @@ const ProductDetailPage = ({ product }: ProduductDetailPageProps) => {
       }
     }
 
-    const newProducts = [product, ...viewedproducts]
+    const newProducts = [product as Product, ...viewedproducts]
     sessionStorage.setItem("viewedProducts", JSON.stringify(newProducts))
     setViewedProducts(newProducts)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -147,12 +141,19 @@ const ProductDetailPage = ({ product }: ProduductDetailPageProps) => {
       </div>
     )
 
-  // const handleChangeVariantAttribute = (att: AttributeWithParentId) => {
-  //   dispatch(changeAttributeItem(att))
-  // }
-
+  if (!product) return null
   return (
     <>
+      <Seo
+        title={product?.name || ""}
+        thumbnailUrl={
+          product?.image_url?.[0] ||
+          "https://scontent.fsgn2-1.fna.fbcdn.net/v/t39.30808-6/212711279_266812501879715_2497633353306262097_n.png?stp=c127.0.757.395a_dst-jpg_p526x395&_nc_cat=105&ccb=1-7&_nc_sid=e3f864&_nc_ohc=M7bK8QeQxhwAX-ZFxcG&_nc_ht=scontent.fsgn2-1.fna&oh=00_AT-LfkFpjPdTONGSnbub0O9Cj6Wnvp1QIPz_UKqL8gqiNg&oe=62D8B90E"
+        }
+        url={`https://womart.vn/product/${product?.product_tmpl_id || ""}`}
+        description={product?.name || ""}
+      />
+
       <HeaderMobile
         centerChild={<p>{product?.product_name || ""} </p>}
         showHomeButton={true}
@@ -171,17 +172,9 @@ const ProductDetailPage = ({ product }: ProduductDetailPageProps) => {
 
       <div className="product__detail-container">
         <div className="container">
-          {isObjectHasValue(product) ? (
-            <Breadcrumb breadcrumbList={breadcrumbList} />
-          ) : null}
+          {isObjectHasValue(product) ? <Breadcrumb breadcrumbList={breadcrumbList} /> : null}
           <section className="product__detail-wrapper">
-            <ProductDetail
-              isLoading={false}
-              product={
-                isObjectHasValue(productDetail) ? productDetail : product
-              }
-              type="detail"
-            />
+            <ProductDetail isLoading={false} product={product} type="detail" />
           </section>
 
           {isObjectHasValue(product) ? (
@@ -198,9 +191,7 @@ const ProductDetailPage = ({ product }: ProduductDetailPageProps) => {
               </h3>
               <Swiper
                 className={`${
-                  relatedProducts && relatedProducts?.length <= 4
-                    ? "swiper-hide-navigation"
-                    : ""
+                  relatedProducts && relatedProducts?.length <= 4 ? "swiper-hide-navigation" : ""
                 }`}
                 modules={[Navigation]}
                 slidesPerView={2}
@@ -240,14 +231,10 @@ const ProductDetailPage = ({ product }: ProduductDetailPageProps) => {
           {isArrayHasValue(viewedproducts) ? (
             <div className="product__detail-recently product__detail-item">
               <h3 className="product__detail-heading">
-                {language === "vni"
-                  ? "Sản phẩm đã xem"
-                  : "Viewed recently products"}
+                {language === "vni" ? "Sản phẩm đã xem" : "Viewed recently products"}
               </h3>
               <Swiper
-                className={`${
-                  viewedproducts.length <= 4 ? "swiper-hide-navigation" : ""
-                }`}
+                className={`${viewedproducts.length <= 4 ? "swiper-hide-navigation" : ""}`}
                 modules={[Navigation]}
                 slidesPerView={2}
                 slidesPerGroup={2}
@@ -292,6 +279,7 @@ export default ProductDetailPage
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const res: any = await productApi.getProductList({ limit: 100 })
+  console.log(getFromLocalStorage("partner_id"))
 
   return {
     paths: res.result.map((item: Product) => ({
@@ -301,9 +289,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
 }
 
-export const getStaticProps: GetStaticProps = async (
-  context: GetStaticPropsContext
-) => {
+export const getStaticProps: GetStaticProps = async (context: GetStaticPropsContext) => {
   const product_id = Number(context.params?.productId) || 0
 
   const {
@@ -324,6 +310,7 @@ export const getStaticProps: GetStaticProps = async (
   }: any = await productApi.getProductDetail({
     product_id: product.product_prod_id,
     list_products: [getListAttributeId(product)],
+    partner_id: getFromLocalStorage("product_id") || 0,
   })
 
   let newProduct: IProductDetail | null = null

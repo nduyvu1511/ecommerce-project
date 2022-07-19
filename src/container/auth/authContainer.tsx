@@ -2,11 +2,11 @@ import { logo } from "@/assets"
 import { PHONE_SCHEMA } from "@/helper"
 import {
   setCurrentUserInfo,
-  setToken,
-  setUserInfo,
   setOpenLoginModal,
   setOpenLoginSMSModal,
   setOpenOtpLoginModal,
+  setToken,
+  setUserInfo,
 } from "@/modules"
 import Image from "next/image"
 import Link from "next/link"
@@ -25,12 +25,7 @@ interface IAuthLayout {
   view: "modal" | "page"
 }
 
-export const AuthContainer = ({
-  children,
-  type,
-  heading,
-  view,
-}: IAuthLayout) => {
+export const AuthContainer = ({ children, type, heading, view }: IAuthLayout) => {
   const language = "vni"
   const router = useRouter()
   const dispatch = useDispatch()
@@ -41,6 +36,7 @@ export const AuthContainer = ({
       if (PHONE_SCHEMA.test(userInfo?.phone || "")) {
         dispatch(setToken(token))
         dispatch(setUserInfo(userInfo))
+
         if (view === "page") {
           router.push("/")
         } else {
@@ -102,32 +98,20 @@ export const AuthContainer = ({
 
                     <div className="form-footer-separate">
                       <span className="left"></span>
-                      <span className="text">
-                        {language === "vni" ? "Hoặc" : "Or"}
-                      </span>
+                      <span className="text">{language === "vni" ? "Hoặc" : "Or"}</span>
                       <span className="right"></span>
                     </div>
 
                     <div className="form-footer-others">
-                      <button
-                        onClick={handleLoginWithGoogle}
-                        className="btn-primary-outline"
-                      >
+                      <button onClick={handleLoginWithGoogle} className="btn-primary-outline">
                         <FcGoogle />
                         <span className="show-on-desktop">Google</span>
-                        <span className="hide-on-desktop">
-                          Tiếp tục với Google
-                        </span>
+                        <span className="hide-on-desktop">Tiếp tục với Google</span>
                       </button>
-                      <button
-                        onClick={handleLoginWithFacebook}
-                        className="btn-primary-outline"
-                      >
+                      <button onClick={handleLoginWithFacebook} className="btn-primary-outline">
                         <BsFacebook />
                         <span className="show-on-desktop">Facebook</span>
-                        <span className="hide-on-desktop">
-                          Tiếp tục với Facebook
-                        </span>
+                        <span className="hide-on-desktop">Tiếp tục với Facebook</span>
                       </button>
 
                       {view === "page" ? (
@@ -135,10 +119,8 @@ export const AuthContainer = ({
                           <Link href="/login/otp" passHref>
                             <button className="btn-primary-outline">
                               <FaPhoneAlt />
-                              <span className="show-on-desktop">SMS</span>
-                              <span className="hide-on-desktop">
-                                Tiếp tục với SMS
-                              </span>
+                              <span className="show-on-desktop">OTP</span>
+                              <span className="hide-on-desktop">Tiếp tục với OTP</span>
                             </button>
                           </Link>
                         ) : null
@@ -151,10 +133,8 @@ export const AuthContainer = ({
                           className="btn-primary-outline"
                         >
                           <FaPhoneAlt />
-                          <span className="show-on-desktop">SMS</span>
-                          <span className="hide-on-desktop">
-                            Tiếp tục với SMS
-                          </span>
+                          <span className="show-on-desktop">OTP</span>
+                          <span className="hide-on-desktop">Tiếp tục với OTP</span>
                         </button>
                       )}
                       {/* )} */}

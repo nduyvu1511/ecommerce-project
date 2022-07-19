@@ -3,37 +3,35 @@
 import { filterNotFound } from "@/assets"
 import {
   BoxGridLoading,
-  Breadcrumb, CategoryLoading,
+  Breadcrumb,
+  CategoryLoading,
   HeaderMobile,
   Modal,
   ModalHeading,
   ProductItem,
   ProductItemList,
   ProductItemLoading,
-  ShopFilter
+  Seo,
+  ShopFilter,
 } from "@/components"
 import ProductFilter from "@/components/product/productFilter"
 import ProductContainer from "@/container/product/productContainer"
 import { RootState } from "@/core/store"
-import {
-  DEFAULT_LIMIT_PRODUCT,
-  isArrayHasValue,
-  isObjectHasValue
-} from "@/helper"
+import { DEFAULT_LIMIT_PRODUCT, isArrayHasValue, isObjectHasValue } from "@/helper"
 import { MainLayout } from "@/layout"
 import {
   AttributeReq,
   BreadcrumbItem,
   Category as ICategory,
   ParentChildCategoryList,
-  Product
+  Product,
 } from "@/models"
 import { setOpenModalFilter } from "@/modules"
 import productApi from "@/services/productApi"
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { FiFilter } from "react-icons/fi"
 import { useDispatch, useSelector } from "react-redux"
 import { useQueryProducts } from "shared/hook"
@@ -49,7 +47,6 @@ const ProductList = ({ products, category }: CategoryProps) => {
   const offset = Number(router.query?.offset) || 0
   const limit = Number(router.query?.limit) || DEFAULT_LIMIT_PRODUCT
   const language = "vni"
-  const shopFilterRef = useRef<HTMLDivElement>(null)
   const { isOpenModalFilter } = useSelector((state: RootState) => state.common)
 
   const {
@@ -98,11 +95,7 @@ const ProductList = ({ products, category }: CategoryProps) => {
     let attribute: any = {}
 
     Object.keys(router.query).forEach((key) => {
-      if (
-        key.includes("attributes_") ||
-        key === "price_range" ||
-        key === "star_rating"
-      ) {
+      if (key.includes("attributes_") || key === "price_range" || key === "star_rating") {
         attribute[key] = router.query[key]
       } else {
         noAttribute[key] = router.query[key]
@@ -206,26 +199,20 @@ const ProductList = ({ products, category }: CategoryProps) => {
               ? productList.map((product, index) => (
                   <ProductItemList key={index} product={product} />
                 ))
-              : productList.map((product, index) => (
-                  <ProductItem key={index} product={product} />
-                ))}
+              : productList.map((product, index) => <ProductItem key={index} product={product} />)}
           </>
         ) : null}
 
         {/* Show when product status is fetching and has no data */}
         {isFetching
-          ? Array.from({ length: 24 }).map((_, index) => (
-              <ProductItemLoading key={index} />
-            ))
+          ? Array.from({ length: 24 }).map((_, index) => <ProductItemLoading key={index} />)
           : null}
       </div>
 
       {!isArrayHasValue(productList) && (!isFetching || !isLoadingMore) ? (
         <div className="shop__products--not-found">
           <img src={filterNotFound} alt="" />
-          <p>
-            Không có sản phẩm nào. Bạn thử tắt điều kiện lọc và tìm lại nhé?
-          </p>
+          <p>Không có sản phẩm nào. Bạn thử tắt điều kiện lọc và tìm lại nhé?</p>
           <Link href={`/category/${Number(router.query.category_id)}?offset=0`}>
             <a className="btn-primary">Xóa bộ lọc</a>
           </Link>
@@ -244,52 +231,57 @@ const ProductList = ({ products, category }: CategoryProps) => {
   )
 
   return (
-    <section className="product__wrapper">
-      <HeaderMobile
-        showSearchInput
-        rightChild={
-          <button
-            onClick={() => dispatch(setOpenModalFilter(true))}
-            className="shop__products-view-filter-btn btn-reset"
-          >
-            <FiFilter />
-          </button>
+    <>
+      <Seo
+        title={category?.parent_category?.[0]?.name || "Danh mục sản phẩm"}
+        thumbnailUrl={
+          category?.parent_category?.[0]?.image + "" ||
+          "https://scontent.fsgn2-1.fna.fbcdn.net/v/t39.30808-6/212711279_266812501879715_2497633353306262097_n.png?stp=c127.0.757.395a_dst-jpg_p526x395&_nc_cat=105&ccb=1-7&_nc_sid=e3f864&_nc_ohc=M7bK8QeQxhwAX-ZFxcG&_nc_ht=scontent.fsgn2-1.fna&oh=00_AT-LfkFpjPdTONGSnbub0O9Cj6Wnvp1QIPz_UKqL8gqiNg&oe=62D8B90E"
         }
+        url={`https://womart.vn/category/${category?.parent_category?.[0]?.id}`}
+        description={category?.parent_category?.[0]?.name || "Danh mục sản phẩm"}
       />
 
-      <section className="shop-container">
-        <div className="container">
-          <Breadcrumb breadcrumbList={breadcrumbList} />
+      <section className="product__wrapper">
+        <HeaderMobile
+          showSearchInput
+          rightChild={
+            <button
+              onClick={() => dispatch(setOpenModalFilter(true))}
+              className="shop__products-view-filter-btn btn-reset"
+            >
+              <FiFilter />
+            </button>
+          }
+        />
 
-          <ProductContainer
-            leftChild={
-              <ShopFilter categories={category.child_category || []} />
-            }
-            rightChild={<ProductList />}
-          ></ProductContainer>
-        </div>
+        <section className="shop-container">
+          <div className="container">
+            <Breadcrumb breadcrumbList={breadcrumbList} />
+
+            <ProductContainer
+              leftChild={<ShopFilter categories={category.child_category || []} />}
+              rightChild={<ProductList />}
+            ></ProductContainer>
+          </div>
+        </section>
+
+        {/* Modal filter in mobile */}
+        {isOpenModalFilter ? (
+          <Modal
+            isShowModal={isOpenModalFilter}
+            handleClickModal={() => dispatch(setOpenModalFilter(false))}
+            direction="right"
+          >
+            <ModalHeading
+              handleClose={() => dispatch(setOpenModalFilter(false))}
+              title={`${language === "vni" ? "Lọc sản phẩm" : "Filter products"} `}
+            />
+            <ShopFilter isCloseModal={true} categories={category?.child_category || []} />
+          </Modal>
+        ) : null}
       </section>
-
-      {/* Modal filter in mobile */}
-      {isOpenModalFilter ? (
-        <Modal
-          isShowModal={isOpenModalFilter}
-          handleClickModal={() => dispatch(setOpenModalFilter(false))}
-          direction="right"
-        >
-          <ModalHeading
-            handleClose={() => dispatch(setOpenModalFilter(false))}
-            title={`${
-              language === "vni" ? "Lọc sản phẩm" : "Filter products"
-            } `}
-          />
-          <ShopFilter
-            isCloseModal={true}
-            categories={category?.child_category || []}
-          />
-        </Modal>
-      ) : null}
-    </section>
+    </>
   )
 }
 
@@ -311,9 +303,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
 }
 
-export const getStaticProps: GetStaticProps = async (
-  context: GetStaticPropsContext
-) => {
+export const getStaticProps: GetStaticProps = async (context: GetStaticPropsContext) => {
   const category_id = Number(context.params?.category_id) || 0
 
   const res: any = await productApi.getChildCategories(category_id)

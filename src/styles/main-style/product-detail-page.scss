@@ -208,7 +208,6 @@
         }
 
         &-cart-mobile {
-          border-inline: 1px solid rgba($color: #fff, $alpha: 0.1);
           @include responsive(md-screen) {
             display: none;
           }

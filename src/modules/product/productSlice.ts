@@ -1,13 +1,8 @@
-import {
-  AttributeWithParentId,
-  BooleanType,
-  Product,
-  ProductSlice
-} from "@/models"
+import { AttributeWithParentId, BooleanType, Product, ProductSlice } from "@/models"
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState: ProductSlice = {
-  product: null,
+  product: undefined,
   listAttribute: undefined,
   search: {
     isOpen: undefined,
@@ -20,21 +15,15 @@ const productSlice = createSlice({
   name: "product",
   initialState,
   reducers: {
-    setProduct: (state, { payload }: { payload: Product | null }) => {
+    setProduct: (state, { payload }: { payload: Product | undefined }) => {
       state.product = payload
     },
 
-    setAttributeList: (
-      state,
-      { payload }: { payload: AttributeWithParentId[] }
-    ) => {
+    setAttributeList: (state, { payload }: { payload: AttributeWithParentId[] }) => {
       state.listAttribute = payload
     },
 
-    changeAttributeItem: (
-      state,
-      { payload }: { payload: AttributeWithParentId }
-    ) => {
+    changeAttributeItem: (state, { payload }: { payload: AttributeWithParentId }) => {
       state.listAttribute = state.listAttribute?.map((item) =>
         item.parentId === payload.parentId ? payload : item
       )

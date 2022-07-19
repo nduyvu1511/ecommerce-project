@@ -13,7 +13,7 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    logOut: (state) => {
+    logout: (state) => {
       state.token = ""
       state.userInfo = {} as UserInfo
       state.fcmToken = ""
@@ -53,7 +53,7 @@ const userSlice = createSlice({
   },
 })
 
-export const { logOut, setToken, setUserInfo, setAddressDefault, editUserInfo, setFCMToken } =
+export const { logout, setToken, setUserInfo, setAddressDefault, editUserInfo, setFCMToken } =
   userSlice.actions
 
 export default userSlice.reducer

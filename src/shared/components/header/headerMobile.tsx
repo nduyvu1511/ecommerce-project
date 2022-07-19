@@ -12,6 +12,7 @@ interface HeaderMobileProps {
   rightChild?: ReactNode
   showHomeButton?: boolean
   showSearchInput?: boolean
+  onClickBackBtn?: Function
 }
 
 export const HeaderMobile = ({
@@ -19,6 +20,7 @@ export const HeaderMobile = ({
   rightChild,
   showHomeButton,
   showSearchInput,
+  onClickBackBtn,
 }: HeaderMobileProps) => {
   const height = useScrollTop()
   const router = useRouter()
@@ -26,21 +28,19 @@ export const HeaderMobile = ({
 
   return (
     <div
-      className={`header__mobile-container ${
-        height > 60 ? "header__mobile-container-active" : ""
-      }`}
+      className={`header__mobile-container ${height > 60 ? "header__mobile-container-active" : ""}`}
     >
       <div className="header__mobile">
         <div className="header__mobile-left">
           {router.pathname === "/" ? (
-            <button
-              onClick={() => dispatch(setOpenNavLeftModal(true))}
-              className="btn-reset"
-            >
+            <button onClick={() => dispatch(setOpenNavLeftModal(true))} className="btn-reset">
               <HiMenu />
             </button>
           ) : (
-            <button onClick={() => router.back()} className="btn-reset">
+            <button
+              onClick={() => (onClickBackBtn ? onClickBackBtn() : router.back())}
+              className="btn-reset"
+            >
               <HiArrowLeft />
             </button>
           )}

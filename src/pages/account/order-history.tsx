@@ -6,6 +6,7 @@ import { formatMoneyVND } from "@/helper"
 import { MainAuthLayout } from "@/layout"
 import { OrderHistory, OrderHistoryDetail } from "@/models"
 import userApi from "@/services/userApi"
+import { useRouter } from "next/router"
 import { useEffect, useRef, useState } from "react"
 import { CgSmileNone } from "react-icons/cg"
 import { HiOutlineArrowsExpand } from "react-icons/hi"
@@ -16,27 +17,22 @@ import { useOrderHistory } from "shared/hook"
 const LIMIT = 12
 
 const OrderHistory: any = () => {
+  const router = useRouter()
   const language = "vni"
   const containerRef = useRef<HTMLSelectElement>(null)
   const { token } = useSelector((state: RootState) => state.user)
 
   const [isOpen, setOpen] = useState<boolean>(false)
   const [offset, setOffset] = useState<number>(0)
-  const [orderDetailHistory, setOrderDetailHistory] =
-    useState<OrderHistoryDetail>()
+  const [orderDetailHistory, setOrderDetailHistory] = useState<OrderHistoryDetail>()
 
-  const {
-    data: orderHistory,
-    isValidating,
-    changePage,
-  } = useOrderHistory(LIMIT)
+  const { data: orderHistory, isValidating, changePage } = useOrderHistory(LIMIT)
 
   const handleGetOrderDetail = (sale_order_id: number) => {
     if (!token) return
     setOpen(true)
     userApi.getDetailOrderHistory({ sale_order_id, token }).then((res: any) => {
-      if (res?.result?.success)
-        setOrderDetailHistory(res.result?.data?.info_booking)
+      if (res?.result?.success) setOrderDetailHistory(res.result?.data?.info_booking)
     })
   }
 
@@ -61,17 +57,13 @@ const OrderHistory: any = () => {
             <thead>
               <tr>
                 <th>{language === "vni" ? "Mã đơn hàng" : "Order ID"}</th>
-                <th className="hide-on-md-table">
-                  {language === "vni" ? "Ngày" : "Date"}
-                </th>
+                <th className="hide-on-md-table">{language === "vni" ? "Ngày" : "Date"}</th>
                 <th>{language === "vni" ? "Số Tiền" : "Total amount"}</th>
                 <th className="hide-on-xl-table">
                   {language === "vni" ? "Tình trạng đơn hàng" : "Order status"}
                 </th>
                 <th className="hide-on-sm-table">
-                  {language === "vni"
-                    ? "Tình trạng thanh toán"
-                    : "Payment status"}
+                  {language === "vni" ? "Tình trạng thanh toán" : "Payment status"}
                 </th>
                 <th>{language === "vni" ? "Chi tiết" : "Detail"}</th>
               </tr>
@@ -83,7 +75,9 @@ const OrderHistory: any = () => {
                     <td>
                       <span
                         className="cursor-pointer"
-                        onClick={() => handleGetOrderDetail(item.order_id)}
+                        onClick={() =>
+                          router.push(`/order-confirmed?sale_order_id=${item.order_id}`)
+                        }
                       >
                         {item.name}
                       </span>
@@ -136,9 +130,7 @@ const OrderHistory: any = () => {
                 })
                 containerRef.current?.scrollIntoView({ behavior: "smooth" })
               }}
-              totalPage={Math.ceil(
-                (orderHistory?.sales_summary?.total_sale || 0) / LIMIT
-              )}
+              totalPage={Math.ceil((orderHistory?.sales_summary?.total_sale || 0) / LIMIT)}
             />
           ) : null}
         </div>

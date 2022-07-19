@@ -1,6 +1,6 @@
 import { authentication, fbProvider, googleProvider } from "@/core"
 import { RootState } from "@/core/store"
-import { isObjectHasValue } from "@/helper"
+import { isObjectHasValue, setToLocalStorage } from "@/helper"
 import { ILogin, UserInfo } from "@/models"
 import { setCurrentToken, setOpenOtpLoginModal, setOpenScreenLoading } from "@/modules"
 import userApi from "@/services/userApi"
@@ -222,6 +222,7 @@ export const useAuth = (): UseAuthRes => {
       if (res?.result?.success) {
         if (isObjectHasValue(res?.result?.data)) {
           handleSuccess(res.result.data)
+          setToLocalStorage("partner_id", res.result?.data?.id)
         }
       } else {
         handleError && handleError()

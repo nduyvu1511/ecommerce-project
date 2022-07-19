@@ -37,13 +37,9 @@ const useDelivery = (): DeliverySWR => {
     "delivery",
     token && productList && orderDraft
       ? () =>
-          orderApi.getDeliveryList({ sale_id: orderDraft.order_id, token }).then((res: any) => {
-            if (res?.result?.success) {
-              return res.result.data
-            } else {
-              dispatch(notify(res.result?.message || "Có lỗi xảy ra", "error"))
-            }
-          })
+          orderApi
+            .getDeliveryList({ sale_id: orderDraft.order_id, token })
+            .then((res: any) => res.result?.data || [])
       : null,
     {
       revalidateOnFocus: false,

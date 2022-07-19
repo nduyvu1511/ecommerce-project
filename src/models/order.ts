@@ -1,16 +1,14 @@
 import { ShippingAddress } from "./address"
 import { CartItem } from "./cart"
-import { OrderHistoryDetail, Token } from "./user"
+import { Token } from "./user"
 
 export interface Payment {
   acquirer_id: number
   name: string
   provider: string
   state: string
-  image_url: {
-    id: number
-    url: string
-  }
+  image_url: string
+  vnpay_type: false | string
 }
 
 export interface ProductCompany {
@@ -147,7 +145,7 @@ export interface GetPriceOfDeliveryProps extends GetDeliveryListProps {
 }
 
 export interface CreateOrderDraftProps {
-  handleSuccess?: Function
+  handleSuccess?: (id: number) => void
   handleError?: Function
   showLoading?: boolean
 }
@@ -163,7 +161,7 @@ export interface ApplyPromotion extends CancelPromotion {
 export interface UpdateOrderDraft extends Token {
   order_id: Array<number>
   partner_shipping_id: number | null
-  payment_term_id: number | null
+  acquirer_id: number | null
 }
 
 export interface PromotionLine {
@@ -178,4 +176,16 @@ export interface PromotionLine {
     type: "percentage" | "fixed" | "bogo_sale" | "range"
     value: number
   }
+}
+
+export interface CreatePaymentParams {
+  token: string
+  acquirer_id: number
+  sale_order_id: number
+  returned_url: string
+}
+
+export interface ConfirmTransactionParams {
+  token: string
+  sale_order_id: number
 }

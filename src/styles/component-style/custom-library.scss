@@ -102,11 +102,13 @@
 
 .zalo-chat-widget {
   z-index: 1000 !important;
-  right: 28px !important;
-  bottom: 95px !important;
-  display: none;
+  right: 10px !important;
+  bottom: 60px !important;
+
   @include responsive(lg-screen) {
     display: block;
+    right: 20px !important;
+    bottom: 20px !important;
   }
 }
 

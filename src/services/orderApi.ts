@@ -2,6 +2,8 @@ import {
   ApplyPromotion,
   CancelPromotion,
   ConfirmDelivery,
+  ConfirmTransactionParams,
+  CreatePaymentParams,
   GetDeliveryListProps,
   GetPriceOfDeliveryProps,
   OrderDone,
@@ -48,6 +50,24 @@ const orderApi = {
 
   applyPromotion: (params: ApplyPromotion) => {
     return axiosClient.post("/promotion_api/apply_promotion", {
+      params: params,
+    })
+  },
+
+  createPayment: (params: CreatePaymentParams) => {
+    return axiosClient.post("/vnpay_controller/create_payment", {
+      params: params,
+    })
+  },
+
+  getVNPAYStatusPayment: (params: { sale_order_id: number; token: string }) => {
+    return axiosClient.post("/payment/vnpay/get_status_payment", {
+      params: params,
+    })
+  },
+
+  confirmTransaction: (params: ConfirmTransactionParams) => {
+    return axiosClient.post("/payment/vnpay/confirm_transaction", {
       params: params,
     })
   },

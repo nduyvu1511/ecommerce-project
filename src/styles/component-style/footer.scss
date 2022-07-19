@@ -239,7 +239,7 @@
         margin-bottom: 0.5rem;
       }
       & p {
-        @include style-text(400, 1.2rem, 1.8rem, $text-color);
+        @include style-text(500, 1.2rem, 2rem, $text-color);
       }
     }
 

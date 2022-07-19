@@ -27,15 +27,9 @@ export const MainContent = () => {
               ? topProducts
                   .slice(0, 12)
                   .map((product, index) => (
-                    <ProductItem
-                      isLoading={isTopLoading}
-                      key={index}
-                      product={product}
-                    />
+                    <ProductItem isLoading={isTopLoading} key={index} product={product} />
                   ))
-              : Array.from({ length: 12 }).map((_, index) => (
-                  <ProductItemLoading key={index} />
-                ))}
+              : Array.from({ length: 12 }).map((_, index) => <ProductItemLoading key={index} />)}
           </div>
         </HomeSlideProduct>
 
@@ -50,15 +44,9 @@ export const MainContent = () => {
               ? newProducts
                   .slice(0, 12)
                   .map((product, index) => (
-                    <ProductItem
-                      isLoading={isTopLoading}
-                      key={index}
-                      product={product}
-                    />
+                    <ProductItem isLoading={isTopLoading} key={index} product={product} />
                   ))
-              : Array.from({ length: 12 }).map((_, index) => (
-                  <ProductItemLoading key={index} />
-                ))}
+              : Array.from({ length: 12 }).map((_, index) => <ProductItemLoading key={index} />)}
           </div>
         </HomeSlideProduct>
       </div>

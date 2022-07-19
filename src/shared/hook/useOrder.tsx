@@ -9,8 +9,9 @@ import { useCartOrder } from "./useCartOrder"
 
 interface UpdateOrderHook {
   partner_shipping_id?: number | null
-  payment_term_id?: number | null
+  acquirer_id?: number | null
   handleSuccess?: Function
+  showLoading?: boolean
 }
 
 interface ProductSWR {
@@ -48,11 +49,17 @@ const useOrder = (): ProductSWR => {
         ],
       })
       showLoading && dispatch(setOpenScreenLoading(false))
+      if (res?.error) {
+        dispatch(
+          notify(res.result.message || "Đơn hàng vừa tạo có lỗi, vui lòng thử lại!", "error")
+        )
+        return
+      }
 
       if (res?.result?.success) {
         const order = res.result.data.sale_order_id?.[0]
         dispatch(setOrderDraft(order))
-        handleSuccess && handleSuccess()
+        handleSuccess && handleSuccess(order.order_id)
         return order
       } else {
         handleError && handleError()
@@ -90,19 +97,19 @@ const useOrder = (): ProductSWR => {
   }
 
   const updateOrderDraft = async (props: UpdateOrderHook) => {
-    const { handleSuccess, partner_shipping_id, payment_term_id } = props
-    if (!orderDraft || !token || (!partner_shipping_id && !payment_term_id)) return
+    const { handleSuccess, partner_shipping_id, acquirer_id, showLoading = true } = props
+    if (!orderDraft || !token || (!partner_shipping_id && !acquirer_id)) return
 
-    dispatch(setOpenScreenLoading(true))
+    showLoading && dispatch(setOpenScreenLoading(true))
 
     try {
       const res: any = await orderApi.updateOrderDraft({
         order_id: [orderDraft.order_id],
         partner_shipping_id: partner_shipping_id || null,
         token,
-        payment_term_id: payment_term_id || null,
+        acquirer_id: acquirer_id || null,
       })
-      dispatch(setOpenScreenLoading(false))
+      showLoading && dispatch(setOpenScreenLoading(false))
 
       if (res?.result === true) {
         handleSuccess && handleSuccess()
@@ -112,7 +119,7 @@ const useOrder = (): ProductSWR => {
         )
       }
     } catch (error) {
-      dispatch(setOpenScreenLoading(false))
+      showLoading && dispatch(setOpenScreenLoading(false))
     }
   }
 

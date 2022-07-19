@@ -1,18 +1,18 @@
-import React, { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 export const ProductDesc = ({ desc }: { desc: string }) => {
   const [show, setShow] = useState<boolean>(false)
-  const divRef = useRef<HTMLDivElement>(null)
+  const height = useRef<number>(0)
 
-  const shouldShow = show && (divRef.current?.clientHeight || 0 > 500)
-  const height = divRef.current?.clientHeight || 500
+  useEffect(() => {
+    height.current = document.querySelector(".product__detail-desc-content")?.clientHeight || 0
+  }, [])
 
   return (
     <div className="product__detail-desc">
       <div
-        ref={divRef}
         className={`product__detail-desc-content ${
-          shouldShow ? "" : "product__detail-desc-content-hide"
+          height.current >= 500 && show ? "" : "product__detail-desc-content-hide"
         }`}
       >
         <div className="product__tab-content-text">
@@ -27,12 +27,14 @@ export const ProductDesc = ({ desc }: { desc: string }) => {
           {!desc ? <p>Không có mô tả nào cho sản phẩm này</p> : null}
         </div>
 
-        {!show ? <div className="gradient"></div> : null}
+        {height.current >= 500 && !show ? <div className="gradient"></div> : null}
       </div>
 
-      <button onClick={() => setShow(!show)} className="btn-primary-outline">
-        {shouldShow || 0 > 500 ? "Ẩn bớt nội dung" : "Xem thêm nội dung"}
-      </button>
+      {height.current >= 500 ? (
+        <button onClick={() => setShow(!show)} className="btn-primary-outline">
+          {show ? "Ẩn bớt nội dung" : "Xem thêm nội dung"}
+        </button>
+      ) : null}
     </div>
   )
 }

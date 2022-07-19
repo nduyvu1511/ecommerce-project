@@ -1,11 +1,12 @@
+import { zaloIcon } from "@/assets"
 import { DOMAIN_URL } from "@/services"
+import Image from "next/image"
 import { BsMessenger, BsTwitter } from "react-icons/bs"
-import { FaFacebookF, FaPinterestP } from "react-icons/fa"
+import { FaFacebookF } from "react-icons/fa"
 import { RiWhatsappLine } from "react-icons/ri"
 import {
   FacebookMessengerShareButton,
   FacebookShareButton,
-  PinterestShareButton,
   TwitterShareButton,
   WhatsappShareButton,
 } from "react-share"
@@ -17,12 +18,7 @@ interface IButtonShare {
   product_id: number
 }
 
-const ButtonShare = ({
-  name,
-  description,
-  imageUrl,
-  product_id,
-}: IButtonShare) => {
+const ButtonShare = ({ name, description, imageUrl, product_id }: IButtonShare) => {
   const url = `${DOMAIN_URL}/product/${product_id}`
 
   return (
@@ -36,6 +32,18 @@ const ButtonShare = ({
       >
         <FaFacebookF />
       </FacebookShareButton>
+      <div
+        className="zalo-share-button"
+        data-href={"url"}
+        data-oaid="1026828826434252149"
+        data-layout="1"
+        data-color="blue"
+        data-customize="true"
+      >
+        <div className="image-container">
+          <Image layout="fill" objectFit="cover" src={zaloIcon} alt="" />
+        </div>
+      </div>
 
       <FacebookMessengerShareButton
         appId={process.env.NEXT_PUBLIC_FACEBOOK_APP_ID || ""}
@@ -45,32 +53,12 @@ const ButtonShare = ({
       >
         <BsMessenger />
       </FacebookMessengerShareButton>
-
-      <TwitterShareButton
-        className="button-share-twitter"
-        title={name}
-        url={url}
-      >
+      <TwitterShareButton className="button-share-twitter" title={name} url={url}>
         <BsTwitter />
       </TwitterShareButton>
-
-      <WhatsappShareButton
-        className="button-share-whatsapp"
-        title={name}
-        url={url}
-      >
+      <WhatsappShareButton className="button-share-whatsapp" title={name} url={url}>
         <RiWhatsappLine />
       </WhatsappShareButton>
-
-      <PinterestShareButton
-        className="button-share-pinterest"
-        title={name}
-        media={imageUrl}
-        description={description}
-        url={url}
-      >
-        <FaPinterestP />
-      </PinterestShareButton>
     </div>
   )
 }

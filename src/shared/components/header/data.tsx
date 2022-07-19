@@ -85,15 +85,8 @@ export const navs = [
     id: 2,
     icon: <RiStoreLine />,
     engName: "Shop",
-    vniName: "Sản phẩm",
-    path: "/shop",
-  },
-  {
-    id: 3,
-    icon: <RiNewspaperLine />,
-    engName: "News",
-    vniName: "Tin tức",
-    path: "/news",
+    vniName: "Danh mục",
+    path: "/category",
   },
   {
     id: 4,
@@ -158,13 +151,13 @@ export const navMobileLinks = [
     name: "Danh mục",
     onClick: setOpenCategoryModal,
   },
-  {
-    id: "chat",
-    icon: <BiMessage />,
-    engName: "Chat",
-    name: "Tin nhắn",
-    onClick: setOpenChatMobile,
-  },
+  // {
+  //   id: "chat",
+  //   icon: <BiMessage />,
+  //   engName: "Chat",
+  //   name: "Tin nhắn",
+  //   onClick: setOpenChatMobile,
+  // },
   {
     id: "/account",
     icon: <AiOutlineUser />,

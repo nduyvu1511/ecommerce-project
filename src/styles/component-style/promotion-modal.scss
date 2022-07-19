@@ -77,7 +77,7 @@
       &-text {
         text-align: center;
         margin-top: 2rem;
-        @include style-text(600, 1.4rem, 1.4rem, $danger);
+        @include style-text(500, 1.4rem, 1.4rem, $danger);
       }
     }
 

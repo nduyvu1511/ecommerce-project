@@ -116,12 +116,7 @@ export interface ISearch {
   keyword: string
 }
 
-export type TypeGet =
-  | "price_reduction"
-  | "price_increase"
-  | "new"
-  | "top_sale"
-  | ""
+export type TypeGet = "price_reduction" | "price_increase" | "new" | "top_sale" | ""
 
 export interface ProductParams {
   type_get?: TypeGet
@@ -279,7 +274,7 @@ export interface CartQuantity {
 }
 
 export interface ProductSlice {
-  product: Product | null
+  product: Product | undefined
   listAttribute: AttributeWithParentId[] | undefined
   search: {
     isOpen: boolean | undefined

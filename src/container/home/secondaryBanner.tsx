@@ -1,19 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 import { API_URL } from "@/services"
-import { useCategory } from "shared/hook"
-import { Autoplay, Navigation, Pagination } from "swiper"
+import { Navigation, Pagination } from "swiper"
 import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/pagination"
 import { Swiper, SwiperSlide } from "swiper/react"
-import { isArrayHasValue } from "../../shared/helper/functions"
 
-export const SecondaryBanner = () => {
-  const { bannerUrls, isValidating } = useCategory(false)
-
+export const SecondaryBanner = ({ banners }: { banners: string[] | null }) => {
   return (
     <div className="secondary__banner">
-      {!isValidating && isArrayHasValue(bannerUrls) ? (
+      {banners ? (
         <div className="secondary__banner-list">
           <Swiper
             modules={[Navigation, Pagination]}
@@ -34,7 +30,7 @@ export const SecondaryBanner = () => {
               },
             }}
           >
-            {bannerUrls.map((banner, index) => (
+            {banners.map((banner, index) => (
               <SwiperSlide key={index}>
                 <img src={`${API_URL}${banner}`} alt="" />
               </SwiperSlide>

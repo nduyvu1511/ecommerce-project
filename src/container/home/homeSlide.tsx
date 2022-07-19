@@ -8,6 +8,7 @@ interface HomeSlideProductProps {
   name: string
   title?: string
   isLoading?: boolean
+  showBtn?: boolean
 }
 
 export const HomeSlideProduct = ({
@@ -16,6 +17,7 @@ export const HomeSlideProduct = ({
   name,
   title,
   isLoading = false,
+  showBtn = true,
 }: HomeSlideProductProps) => {
   return (
     <section className="home__content-products">
@@ -43,6 +45,14 @@ export const HomeSlideProduct = ({
         </div>
       )}
       {children}
+
+      {showBtn ? (
+        <div className="home__content-products-btn">
+          <Link href={path} passHref>
+            <a className="btn-primary-outline">Xem thêm</a>
+          </Link>
+        </div>
+      ) : null}
     </section>
   )
 }

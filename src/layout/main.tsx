@@ -1,6 +1,5 @@
 import { Footer, Header } from "@/components"
 import { ModalContainer } from "@/container"
-import ChatContainer from "@/container/chat/chatContainer"
 import { LayoutProps } from "@/models"
 import { App } from "./app"
 
@@ -12,7 +11,7 @@ export const MainLayout = ({ children }: LayoutProps) => {
         <main>{children}</main>
         <Footer />
         <ModalContainer />
-        <ChatContainer />
+        {/* <ChatContainer /> */}
       </section>
     </App>
   )

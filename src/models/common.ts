@@ -91,5 +91,18 @@ export interface BreadcrumbItem {
 // }
 
 export interface GetBannerParams {
-  radio: {}
+  radio: string[]
+  type?: "slide" | "banner"
+}
+
+export type BannerAreaType = "topArea" | "bottomArea" | "centerArea"
+export type BannerRatio = "1:3" | "1:1" | "3:1"
+
+export interface BannerRes {
+  [key: string]: {
+    name: string
+    type: string
+    ratio: BannerRatio
+    images: string[]
+  }[]
 }
