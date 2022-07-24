@@ -19,11 +19,10 @@ const Checkout = () => {
   const { data: paymentList = [] } = usePayment()
   const { data: { shipping_adress: addressList = [] } = { data: [] } } = useUserAddress()
   const { token } = useSelector((state: RootState) => state.user)
-  const {
-    address: addressOrder,
-    orderDraft,
-    productList,
-  } = useSelector((state: RootState) => state.order)
+  const addressOrder = useSelector((state: RootState) => state.order.address)
+  const orderDraft = useSelector((state: RootState) => state.order.orderDraft)
+  const productList = useSelector((state: RootState) => state.order.productList)
+
   const { addressDefault } = useSelector((state: RootState) => state.user)
   const { updateOrderDraft } = useOrder()
   const { sale_order_id } = router.query

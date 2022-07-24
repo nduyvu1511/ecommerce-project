@@ -1,7 +1,6 @@
-import { logo } from "@/assets"
+import { logo2 } from "@/assets"
 import Image from "next/image"
 import Link from "next/link"
-import React from "react"
 
 export const HeaderLogin = ({ title }: { title: string }) => {
   return (
@@ -11,7 +10,7 @@ export const HeaderLogin = ({ title }: { title: string }) => {
           <div className="header__login-inner-logo">
             <Link href="/" passHref>
               <div className="image-container cursor-pointer">
-                <Image src={logo} alt="" className="image" layout="fill" />
+                <Image src={logo2} alt="" className="image" layout="fill" />
               </div>
             </Link>
             <p>{title}</p>

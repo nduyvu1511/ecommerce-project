@@ -19,6 +19,7 @@ interface ProductSWR {
   handleSearchProduct: Function
   clearSearchResult: Function
   toggleWishlistStatus: (id: number) => void
+  isInitialLoading: boolean
 }
 
 const useProduct = ({ params, key, shouldFetch = true }: Props): ProductSWR => {
@@ -34,7 +35,7 @@ const useProduct = ({ params, key, shouldFetch = true }: Props): ProductSWR => {
             .then((res: any) => res?.result),
     {
       revalidateOnFocus: false,
-      dedupingInterval: 12000,
+      dedupingInterval: 120000,
     }
   )
 
@@ -70,6 +71,7 @@ const useProduct = ({ params, key, shouldFetch = true }: Props): ProductSWR => {
     handleSearchProduct,
     clearSearchResult,
     toggleWishlistStatus,
+    isInitialLoading: error === undefined && data === undefined,
   }
 }
 

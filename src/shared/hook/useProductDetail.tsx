@@ -1,71 +1,92 @@
 import { RootState } from "@/core/store"
-import { isArrayHasValue, isObjectHasValue } from "@/helper"
-import { ProductDetail, ProductDetailRes } from "@/models"
+import { getListAttributeId, isObjectHasValue, mergeProductAndProductDetail } from "@/helper"
+import {
+  AttributeWithParentId,
+  GetProductDetail,
+  Product,
+  ProductDetail,
+  ProductDetailRes,
+} from "@/models"
 import productApi from "@/services/productApi"
-import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
+import useSWR, { KeyedMutator } from "swr"
+
+interface Res {
+  data: ProductDetail | undefined
+  isValidating: boolean
+  clearProduct: Function
+  isInitialLoading: boolean
+  mutate: KeyedMutator<any>
+  getProductVariation: (
+    product: GetProductDetail & { listAttribute: AttributeWithParentId[] }
+  ) => void
+}
 
 interface Props {
-  product: ProductDetail
+  type: "detail" | "modal"
+  initialValue?: ProductDetail | Product
 }
 
-interface UseProductDetailProps {
-  product: ProductDetail | undefined
-  clearProductDetail: Function
-}
-
-const useProductDetail = ({ product }: Props): UseProductDetailProps => {
-  // const firstRef = useRef<boolean>(false)
-  const { listAttribute } = useSelector((state: RootState) => state.product)
-  const { userInfo: { id: partner_id = 1 } = { userInfo: undefined } } = useSelector(
-    (state: RootState) => state.user
+const useProductDetail = ({ type, initialValue }: Props): Res => {
+  const { userInfo } = useSelector((state: RootState) => state.user)
+  const { isValidating, data, mutate, error } = useSWR<any>(
+    (type === "detail" && userInfo?.id) || type === "modal" ? "get_product_detail" : null,
+    () =>
+      productApi
+        .getProductDetail({
+          partner_id: userInfo?.id,
+          list_products: initialValue ? [getListAttributeId(initialValue)] : [],
+          product_id: initialValue?.product_tmpl_id || 0,
+        })
+        .then((res: any) => {
+          const productDetail: ProductDetailRes = res?.result?.data?.detail
+          return {
+            ...mergeProductAndProductDetail({ product: initialValue as Product, productDetail }),
+            price: productDetail?.price || initialValue?.price || 0,
+          }
+        })
+        .catch((err) => console.log(err)),
+    {
+      dedupingInterval: 1000,
+      revalidateOnFocus: false,
+      fallbackData: initialValue,
+    }
   )
 
-  const [productDetail, setProductDetail] = useState<ProductDetail | undefined>(product)
-
-  useEffect(() => {
-    // if (firstRef.current) {
-    if (!listAttribute || !isArrayHasValue(listAttribute) || !isObjectHasValue(product)) return
-
+  const getProductVariation = (
+    params: GetProductDetail & { listAttribute: AttributeWithParentId[] }
+  ) => {
     productApi
       .getProductDetail({
-        product_id: product.product_prod_id,
-        partner_id,
-        list_products: [
-          {
-            id: product.product_tmpl_id,
-            lst_attributes_id: listAttribute.map((item) => item.id),
-          },
-        ],
+        ...params,
+        partner_id: userInfo?.id || 0,
       })
       .then((res: any) => {
-        const productDetailFetch: ProductDetailRes = res.result.data.detail
-        if (isObjectHasValue(productDetailFetch)) {
-          setProductDetail({
-            ...product,
-            ...productDetail,
-            image_url:
-              productDetailFetch.image_url?.length > 0
-                ? productDetailFetch.image_url
-                : product.image_url,
-            price: productDetailFetch.price,
-            product_prod_id: productDetailFetch.id,
-            qty_available: productDetailFetch.qty_available,
-          })
+        const productDetail: ProductDetailRes = res.result.data.detail
+        if (isObjectHasValue(productDetail)) {
+          mutate(
+            mergeProductAndProductDetail({
+              productDetail,
+              product: data,
+            }),
+            false
+          )
         }
       })
-    // } else {
-    //   firstRef.current = true
-    // }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listAttribute])
-
-  const clearProductDetail = () => {
-    setProductDetail(undefined)
   }
 
-  return { product: productDetail, clearProductDetail }
+  const clearProduct = () => {
+    mutate(undefined, false)
+  }
+
+  return {
+    data,
+    isValidating,
+    clearProduct,
+    isInitialLoading: data === undefined && error === undefined,
+    mutate,
+    getProductVariation,
+  }
 }
 
 export { useProductDetail }

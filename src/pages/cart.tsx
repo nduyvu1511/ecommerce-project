@@ -23,7 +23,8 @@ const Cart = () => {
     findProductFromProductList,
     handleResetOrderField,
   } = useCartOrder(true)
-  const { productList } = useSelector((state: RootState) => state.order)
+  const
+    productList = useSelector((state: RootState) => state.order.productList)
   const [currentCartItemLoading, setCurrentCartItemLoading] = useState<number>()
 
   useEffect(() => {

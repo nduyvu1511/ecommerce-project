@@ -1,4 +1,4 @@
-import { logo } from "@/assets"
+import { logo2 } from "@/assets"
 import {
   AddressForm,
   CartModal,
@@ -35,21 +35,19 @@ import { useDispatch, useSelector } from "react-redux"
 export const ModalContainer = () => {
   const dispatch = useDispatch()
   const { product } = useSelector((state: RootState) => state.product)
-  const {
-    isOpenModalProduct,
-    isOpenCartModal,
-    isOpenSearchModal,
-    isOpenCategoryModal,
-    isOpenNavLeftModal,
-    isOpenScreenLoading,
-    isOpenAddressForm,
-    isOpenModalCoupons,
-    isOpenOtpLoginModal,
-    isOpenLoginSMSModal,
-    isOpenLoginModal,
-    previewImageUrl,
-  } = useSelector((state: RootState) => state.common)
-  const { isShowCompareModal } = useSelector((state: RootState) => state.compare)
+  const isOpenModalProduct = useSelector((state: RootState) => state.common.isOpenModalProduct)
+  const isOpenCartModal = useSelector((state: RootState) => state.common.isOpenCartModal)
+  const isOpenSearchModal = useSelector((state: RootState) => state.common.isOpenSearchModal)
+  const isOpenCategoryModal = useSelector((state: RootState) => state.common.isOpenCategoryModal)
+  const isOpenNavLeftModal = useSelector((state: RootState) => state.common.isOpenNavLeftModal)
+  const isOpenScreenLoading = useSelector((state: RootState) => state.common.isOpenScreenLoading)
+  const isOpenAddressForm = useSelector((state: RootState) => state.common.isOpenAddressForm)
+  const isOpenModalCoupons = useSelector((state: RootState) => state.common.isOpenModalCoupons)
+  const isOpenOtpLoginModal = useSelector((state: RootState) => state.common.isOpenOtpLoginModal)
+  const isOpenLoginSMSModal = useSelector((state: RootState) => state.common.isOpenLoginSMSModal)
+  const isOpenLoginModal = useSelector((state: RootState) => state.common.isOpenLoginModal)
+  const previewImageUrl = useSelector((state: RootState) => state.common.previewImageUrl)
+  const isShowCompareModal = useSelector((state: RootState) => state.compare.isShowCompareModal)
 
   return (
     <section className="modal__container">
@@ -82,7 +80,7 @@ export const ModalContainer = () => {
               <Link passHref href="/">
                 <div onClick={() => dispatch(setOpenNavLeftModal(false))}>
                   <div className="image-container menu__mobile-header-img">
-                    <Image src={logo} alt="" layout="fill" className="image" />
+                    <Image src={logo2} alt="" layout="fill" className="image" />
                   </div>
                 </div>
               </Link>
@@ -90,7 +88,6 @@ export const ModalContainer = () => {
                 <IoCloseCircleSharp />
               </button>
             </header>
-            {/* <CategoryDropdown /> */}
             <Navigation handleClickModal={() => dispatch(setOpenNavLeftModal(false))} />
           </div>
         </Modal>

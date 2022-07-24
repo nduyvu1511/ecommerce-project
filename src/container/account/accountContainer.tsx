@@ -1,4 +1,4 @@
-import { Breadcrumb, Modal, ModalHeading } from "@/components"
+import { Breadcrumb, HeaderMobile, Modal, ModalHeading } from "@/components"
 import { AccountOption } from "@/container"
 import { RootState } from "@/core/store"
 import { BreadcrumbItem } from "@/models"
@@ -6,7 +6,6 @@ import { setOpenModalAccountOption } from "@/modules"
 import { ReactNode } from "react"
 import { RiMenuFill } from "react-icons/ri"
 import { useDispatch, useSelector } from "react-redux"
-import { HeaderMobile } from "@/components"
 
 interface AccountContainerProps {
   children: ReactNode
@@ -17,10 +16,9 @@ interface AccountContainerProps {
 
 export const AccountContainer = (props: AccountContainerProps) => {
   const { children, heading, breadcrumbList, headerMobileTitle } = props
-
   const dispatch = useDispatch()
-  const { isOpenModalOptionAccount } = useSelector(
-    (state: RootState) => state.common
+  const isOpenModalOptionAccount = useSelector(
+    (state: RootState) => state.common.isOpenModalOptionAccount
   )
 
   return (
@@ -41,11 +39,7 @@ export const AccountContainer = (props: AccountContainerProps) => {
                     <h3>{heading}</h3>
                   </div>
                   <button
-                    onClick={() =>
-                      dispatch(
-                        setOpenModalAccountOption(!isOpenModalOptionAccount)
-                      )
-                    }
+                    onClick={() => dispatch(setOpenModalAccountOption(!isOpenModalOptionAccount))}
                     className="btn-reset account__option-menu-btn"
                   >
                     <RiMenuFill />

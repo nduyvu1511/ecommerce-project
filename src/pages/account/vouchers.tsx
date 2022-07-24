@@ -2,10 +2,12 @@ import { cartEmptyIcon } from "@/assets"
 import { PromotionItem } from "@/components"
 import { AccountContainer } from "@/container"
 import { MainAuthLayout } from "@/layout"
+import { useRouter } from "next/router"
 import { RiLoader4Line } from "react-icons/ri"
 import { usePromotion } from "shared/hook"
 
 const AccountGeneral = () => {
+  const router = useRouter()
   const { data: promotionList, isValidating } = usePromotion()
 
   return (
@@ -34,7 +36,9 @@ const AccountGeneral = () => {
             ? promotionList.map(
                 (promo) =>
                   promo.is_use_promotion && (
-                    <PromotionItem promotion={promo} key={promo.promotion_id} />
+                    <div key={promo.promotion_id} onClick={() => router.push("/category")}>
+                      <PromotionItem promotion={promo} />
+                    </div>
                   )
               )
             : null}

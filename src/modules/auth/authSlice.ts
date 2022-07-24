@@ -1,3 +1,4 @@
+import { RootState } from "@/core/store"
 import { AuthSlice, UserInfo } from "@/models"
 import { createSlice } from "@reduxjs/toolkit"
 
@@ -20,10 +21,7 @@ const authSlice = createSlice({
       state.phoneNumber = payload
     },
 
-    setCurrentUserInfo: (
-      state,
-      { payload }: { payload: UserInfo | undefined }
-    ) => {
+    setCurrentUserInfo: (state, { payload }: { payload: UserInfo | undefined }) => {
       state.currentUserInfo = payload
     },
 
@@ -32,10 +30,7 @@ const authSlice = createSlice({
       state.phoneNumber = undefined
     },
 
-    setValidateCreatePasswordOTP: (
-      state,
-      { payload }: { payload: boolean | undefined }
-    ) => {
+    setValidateCreatePasswordOTP: (state, { payload }: { payload: boolean | undefined }) => {
       state.isValidateCreatePasswordOTP = payload
     },
   },

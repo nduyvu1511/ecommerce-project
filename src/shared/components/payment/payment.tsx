@@ -18,9 +18,11 @@ export const Payment = ({ paymentList }: PaymentProps) => {
   const router = useRouter()
   const dispatch = useDispatch()
   const { token } = useSelector((state: RootState) => state.user)
-  const { payment, address, delivery, productList } = useSelector((state: RootState) => state.order)
   const { updateOrderDraft } = useOrder()
-  const { orderDraft } = useSelector((state: RootState) => state.order)
+  const orderDraft = useSelector((state: RootState) => state.order.orderDraft)
+  const payment = useSelector((state: RootState) => state.order.payment)
+  const address = useSelector((state: RootState) => state.order.address)
+  const delivery = useSelector((state: RootState) => state.order.delivery)
   const { createPayment } = usePayment(false)
 
   // Functions

@@ -1,17 +1,13 @@
-import { Attribute, ProductAttribute } from "@/models"
+import { Attribute, AttributeWithParentId, ProductAttribute } from "@/models"
 import { useState } from "react"
 import { BsCheck } from "react-icons/bs"
-import { Dropdown } from "../common"
 
 export interface IProductVariation {
   attribute: ProductAttribute
-  onChangeAttribute: Function
+  onChangeAttribute: (params: AttributeWithParentId) => void
 }
 
-export const ProductVariation = ({
-  attribute,
-  onChangeAttribute,
-}: IProductVariation) => {
+export const ProductVariation = ({ attribute, onChangeAttribute }: IProductVariation) => {
   const [id, setId] = useState<number>(attribute.values[0].id)
 
   const handleClick = (item: Attribute) => {
@@ -29,9 +25,7 @@ export const ProductVariation = ({
             <li
               onClick={() => handleClick(item)}
               key={item.id}
-              className={`product__variation-list-item ${
-                id === item.id ? "active" : ""
-              }`}
+              className={`product__variation-list-item ${id === item.id ? "active" : ""}`}
             >
               {item.id === id ? (
                 <span className="product__variation-list-item-icon">

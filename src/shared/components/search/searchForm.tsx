@@ -23,17 +23,13 @@ export const SearchForm = memo(function SearchFormChild({
   const router = useRouter()
   const secondRef = useRef<boolean>(false)
   const inputRef = useRef<HTMLInputElement>(null)
-  const [value, setValue] = useState<string>(
-    (router.query?.keyword || "") as string
-  )
+  const [value, setValue] = useState<string>((router.query?.keyword || "") as string)
 
   const { handleSearchProduct, clearSearchResult } = useProduct({
     key: "products_search",
   })
 
-  const {
-    search: { keyword },
-  } = useSelector((state: RootState) => state.product)
+  const keyword = useSelector((state: RootState) => state.product.search.keyword)
   const valueSearchTerm: string = useDebounce(value, 500)
 
   useEffect(() => {
@@ -95,9 +91,7 @@ export const SearchForm = memo(function SearchFormChild({
         onChange={(e) => {
           setValue(e.target.value)
         }}
-        placeholder={`${
-          language === "vni" ? "Tìm kiếm sản phẩm..." : "Search for products..."
-        }`}
+        placeholder={`${language === "vni" ? "Tìm kiếm sản phẩm..." : "Search for products..."}`}
       />
 
       <span

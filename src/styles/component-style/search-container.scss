@@ -136,21 +136,21 @@
     }
   }
 
+  &-loading {
+    background-color: #fff;
+    padding: 5rem 0;
+    @include flex-center;
+
+    & svg {
+      fill: $text-color;
+      font-size: 2rem;
+      animation: loading 1s linear infinite;
+    }
+  }
+
   &-list {
     list-style: none;
     padding-bottom: 1rem;
-
-    & .search__result-loading {
-      background-color: #fff;
-      padding: 5rem 0;
-      @include flex-center;
-
-      & svg {
-        fill: $text-color;
-        font-size: 2rem;
-        animation: loading 1s linear infinite;
-      }
-    }
 
     .search__result-keyword {
       padding: 1.5rem;

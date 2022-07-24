@@ -50,7 +50,6 @@
             @include flex(flex-start, center);
             cursor: pointer;
             position: relative;
-            padding: 0.5rem 0;
 
             & p {
               @include flex(flex-start, center);
@@ -112,7 +111,7 @@
 
           &-noti {
             position: relative;
-            margin-right: 2rem;
+            padding: 0.5rem 0;
 
             & a {
               display: flex;

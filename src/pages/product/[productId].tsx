@@ -3,13 +3,12 @@ import {
   HeaderMobile,
   ProductDetail,
   ProductDetailLoading,
-  ProductItem,
+  ProductSlide,
   ProductTabs,
   Seo,
 } from "@/components"
 import { RootState } from "@/core/store"
 import {
-  getAttributeList,
   getFromLocalStorage,
   getListAttributeId,
   isArrayHasValue,
@@ -18,16 +17,15 @@ import {
 } from "@/helper"
 import { MainLayout } from "@/layout"
 import { BreadcrumbItem, Category, Product, ProductDetail as IProductDetail } from "@/models"
-import { setAttributeList, setOpenCartModal, setProduct } from "@/modules"
+import { setOpenCartModal, setProduct } from "@/modules"
 import productApi from "@/services/productApi"
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import Script from "next/script"
+import { useEffect, useRef, useState } from "react"
 import { BiCart } from "react-icons/bi"
 import { useDispatch, useSelector } from "react-redux"
 import { useCartOrder, useProductDetail, useReview, useWishlist } from "shared/hook"
-import { Navigation } from "swiper"
-import { Swiper, SwiperSlide } from "swiper/react"
 
 interface ProduductDetailPageProps {
   product: IProductDetail
@@ -37,17 +35,21 @@ const ProductDetailPage = ({ product: productProps }: ProduductDetailPageProps) 
   const dispatch = useDispatch()
   const router = useRouter()
   const { carts } = useCartOrder()
-  const language = "vni"
-  const { userInfo } = useSelector((state: RootState) => state.user)
   useWishlist(true)
-  const { product, clearProductDetail } = useProductDetail({
-    product: productProps,
-  })
+  const secondFetch = useRef<boolean>(false)
+  const userInfo = useSelector((state: RootState) => state.user.userInfo)
   const { clearComments } = useReview({
     shouldFetch: false,
     product_id: Number(router.query.productId) || 0,
   })
   const [breadcrumbList, setBreadcrumbList] = useState<BreadcrumbItem[]>([])
+
+  const {
+    data: product,
+    clearProduct: clearProductDetail,
+    isValidating,
+    mutate,
+  } = useProductDetail({ type: "detail", initialValue: productProps })
 
   // State
   const getProductsFromSession = sessionStorage.getItem("viewedProducts")
@@ -86,6 +88,8 @@ const ProductDetailPage = ({ product: productProps }: ProduductDetailPageProps) 
         })),
         { name: product?.product_name || "", path: "" },
       ])
+    } else {
+      setBreadcrumbList([{ name: product?.product_name || "", path: "/" }])
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -93,17 +97,16 @@ const ProductDetailPage = ({ product: productProps }: ProduductDetailPageProps) 
 
   // assign false to ref if the product detail page is unmount
   useEffect(() => {
+    if (!router.isReady) return
     if (!product || !isObjectHasValue(product)) return
-
-    dispatch(setProduct(product))
-    const attributeList = getAttributeList(product)
-    if (isArrayHasValue(attributeList)) {
-      dispatch(setAttributeList(attributeList))
+    if (!secondFetch.current) {
+      secondFetch.current = true
+    } else {
+      mutate()
     }
-
+    dispatch(setProduct(product))
     return () => {
       clearProductDetail()
-      dispatch(setProduct(undefined))
       clearComments()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -132,7 +135,7 @@ const ProductDetailPage = ({ product: productProps }: ProduductDetailPageProps) 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, product])
 
-  if (router.isFallback)
+  if (router.isFallback || isValidating)
     return (
       <div className="product__detail-loading">
         <div className="container">
@@ -174,7 +177,7 @@ const ProductDetailPage = ({ product: productProps }: ProduductDetailPageProps) 
         <div className="container">
           {isObjectHasValue(product) ? <Breadcrumb breadcrumbList={breadcrumbList} /> : null}
           <section className="product__detail-wrapper">
-            <ProductDetail isLoading={false} product={product} type="detail" />
+            <ProductDetail product={product} />
           </section>
 
           {isObjectHasValue(product) ? (
@@ -184,87 +187,17 @@ const ProductDetailPage = ({ product: productProps }: ProduductDetailPageProps) 
           ) : null}
 
           {/* Related Products */}
-          {isArrayHasValue(relatedProducts) ? (
+          {relatedProducts && isArrayHasValue(relatedProducts) ? (
             <div className="product__detail-related product__detail-item">
-              <h3 className="product__detail-heading">
-                {language === "vni" ? "sản Phẩm liên quan" : "Related products"}
-              </h3>
-              <Swiper
-                className={`${
-                  relatedProducts && relatedProducts?.length <= 4 ? "swiper-hide-navigation" : ""
-                }`}
-                modules={[Navigation]}
-                slidesPerView={2}
-                slidesPerGroup={2}
-                navigation
-                spaceBetween={5}
-                breakpoints={{
-                  576: {
-                    slidesPerView: 3,
-                    slidesPerGroup: 3,
-                  },
-                  992: {
-                    slidesPerView: 4,
-                    slidesPerGroup: 4,
-                  },
-                  1024: {
-                    slidesPerView: 5,
-                    slidesPerGroup: 5,
-                  },
-                  1200: {
-                    slidesPerView: 6,
-                    slidesPerGroup: 6,
-                  },
-                }}
-              >
-                {relatedProducts &&
-                  isArrayHasValue(relatedProducts) &&
-                  relatedProducts.map((product, index) => (
-                    <SwiperSlide key={index}>
-                      <ProductItem product={product} />
-                    </SwiperSlide>
-                  ))}
-              </Swiper>
+              <h3 className="product__detail-heading">Sản Phẩm liên quan</h3>
+              <ProductSlide products={relatedProducts} />
             </div>
           ) : null}
 
-          {isArrayHasValue(viewedproducts) ? (
+          {viewedproducts && isArrayHasValue(viewedproducts) ? (
             <div className="product__detail-recently product__detail-item">
-              <h3 className="product__detail-heading">
-                {language === "vni" ? "Sản phẩm đã xem" : "Viewed recently products"}
-              </h3>
-              <Swiper
-                className={`${viewedproducts.length <= 4 ? "swiper-hide-navigation" : ""}`}
-                modules={[Navigation]}
-                slidesPerView={2}
-                slidesPerGroup={2}
-                navigation
-                spaceBetween={5}
-                breakpoints={{
-                  576: {
-                    slidesPerView: 3,
-                    slidesPerGroup: 3,
-                  },
-                  992: {
-                    slidesPerView: 4,
-                    slidesPerGroup: 4,
-                  },
-                  1024: {
-                    slidesPerView: 5,
-                    slidesPerGroup: 5,
-                  },
-                  1200: {
-                    slidesPerView: 6,
-                    slidesPerGroup: 6,
-                  },
-                }}
-              >
-                {viewedproducts.map((product, index) => (
-                  <SwiperSlide key={index}>
-                    <ProductItem product={product} />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
+              <h3 className="product__detail-heading">Sản phẩm đã xem</h3>
+              <ProductSlide products={viewedproducts} />
             </div>
           ) : null}
         </div>
@@ -274,12 +207,10 @@ const ProductDetailPage = ({ product: productProps }: ProduductDetailPageProps) 
 }
 
 ProductDetailPage.Layout = MainLayout
-
 export default ProductDetailPage
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const res: any = await productApi.getProductList({ limit: 100 })
-  console.log(getFromLocalStorage("partner_id"))
 
   return {
     paths: res.result.map((item: Product) => ({

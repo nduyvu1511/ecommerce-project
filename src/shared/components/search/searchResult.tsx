@@ -10,18 +10,12 @@ import { RiLoader4Line } from "react-icons/ri"
 import { useDispatch, useSelector } from "react-redux"
 import { useClickOutside, useProduct } from "shared/hook"
 
-export const SearchResult = ({
-  isCloseModal = false,
-}: {
-  isCloseModal?: boolean
-}) => {
+export const SearchResult = ({ isCloseModal = false }: { isCloseModal?: boolean }) => {
   const dispatch = useDispatch()
   const searchResultRef = useRef<HTMLDivElement>(null)
 
-  const { isOpen, keyword, isSearching } = useSelector(
-    (state: RootState) => state.product.search
-  )
-  const { data: searchProducts = [] } = useProduct({
+  const { isOpen, keyword, isSearching } = useSelector((state: RootState) => state.product.search)
+  const { data: searchProducts = [], isInitialLoading } = useProduct({
     key: "products_search",
   })
 
@@ -30,8 +24,7 @@ export const SearchResult = ({
     if (
       e.target === document.querySelector(".header__search-input") ||
       e.target === document.querySelector(".header__search-btn") ||
-      e.target ===
-        document.querySelector(".header__search-input-clear-active") ||
+      e.target === document.querySelector(".header__search-input-clear-active") ||
       checkContainsElement(e.target)
     )
       return
@@ -40,13 +33,11 @@ export const SearchResult = ({
 
   const checkContainsElement = (event: EventTarget | null) => {
     let isContain = false
-    document
-      .querySelectorAll(".search__result-list-item-link")
-      .forEach((item) => {
-        if (item === event) {
-          isContain = true
-        }
-      })
+    document.querySelectorAll(".search__result-list-item-link").forEach((item) => {
+      if (item === event) {
+        isContain = true
+      }
+    })
 
     return isContain
   }
@@ -59,33 +50,28 @@ export const SearchResult = ({
   }
 
   return (
-    <>
-      <div ref={searchResultRef} className="search__result">
-        {keyword &&
-        isSearching === false &&
-        !isArrayHasValue(searchProducts) ? (
-          <div className="search__result--no-result">
-            không có kết quả nào cho{" "}
-            <span>
-              <small>"</small>
-              {keyword}
-              <small>"</small>
-            </span>
-          </div>
-        ) : (
-          <ul className="search__result-list">
-            {isSearching && !isArrayHasValue(searchProducts) ? (
-              <li className="search__result-loading">
-                <RiLoader4Line />
-              </li>
-            ) : null}
+    <div ref={searchResultRef} className="search__result">
+      {isSearching ? (
+        <div className="search__result-loading">
+          <RiLoader4Line />
+        </div>
+      ) : (
+        <>
+          {keyword && !isArrayHasValue(searchProducts) ? (
+            <div className="search__result--no-result">
+              không có kết quả nào cho{" "}
+              <span>
+                <small>"</small>
+                {keyword}
+                <small>"</small>
+              </span>
+            </div>
+          ) : null}
 
+          <ul className="search__result-list">
             {keyword && isArrayHasValue(searchProducts) ? (
               <li className="search__result-keyword">
-                <span>
-                  {" "}
-                  {`Hiển thị ${searchProducts.length} kết quả cho`}:{" "}
-                </span>
+                <span> {`Hiển thị ${searchProducts.length} kết quả cho`}: </span>
                 <p>"{keyword}"</p>
               </li>
             ) : null}
@@ -100,9 +86,7 @@ export const SearchResult = ({
                     }}
                     className="search__result-list-item-link cursor-pointer"
                   >
-                    <p className="search__result-list-item-name">
-                      {product.product_name}
-                    </p>
+                    <p className="search__result-list-item-name">{product.product_name}</p>
                     <div className="search__result-list-item-img image-container">
                       <Image
                         src={`${API_URL}${product.image_url[0]}`}
@@ -116,8 +100,8 @@ export const SearchResult = ({
               </li>
             ))}
           </ul>
-        )}
-      </div>
-    </>
+        </>
+      )}
+    </div>
   )
 }

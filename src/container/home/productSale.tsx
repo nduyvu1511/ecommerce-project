@@ -10,7 +10,7 @@ import "swiper/css/pagination"
 import useSWR from "swr"
 
 export const ProductSaleContainer = () => {
-  const { token } = useSelector((state: RootState) => state.user)
+  const token = useSelector((state: RootState) => state.user.token)
   const {
     data: productSales,
     isValidating,
@@ -39,9 +39,7 @@ export const ProductSaleContainer = () => {
               isLoading={isValidating}
               setProductsSale={(deal_id: number) =>
                 mutate([
-                  ...productSales.filter(
-                    (item: ProductSale) => item.deal_id !== deal_id
-                  ),
+                  ...productSales.filter((item: ProductSale) => item.deal_id !== deal_id),
                   ,
                   false,
                 ])

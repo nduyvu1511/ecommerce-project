@@ -9,7 +9,7 @@ import { App } from "./app"
 import { MainLayout } from "./main"
 
 export const MainAuthLayout = ({ children }: LayoutProps) => {
-  const { token } = useSelector((state: RootState) => state.user)
+  const token = useSelector((state: RootState) => state.user.token)
   const router = useRouter()
   const { getUserInfo } = useAuth()
   const dispatch = useDispatch()

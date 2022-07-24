@@ -1,6 +1,9 @@
 import { zaloIcon } from "@/assets"
 import { DOMAIN_URL } from "@/services"
+import Head from "next/head"
 import Image from "next/image"
+import Script from "next/script"
+import { useState } from "react"
 import { BsMessenger, BsTwitter } from "react-icons/bs"
 import { FaFacebookF } from "react-icons/fa"
 import { RiWhatsappLine } from "react-icons/ri"
@@ -32,16 +35,20 @@ const ButtonShare = ({ name, description, imageUrl, product_id }: IButtonShare) 
       >
         <FaFacebookF />
       </FacebookShareButton>
-      <div
-        className="zalo-share-button"
-        data-href={"url"}
-        data-oaid="1026828826434252149"
-        data-layout="1"
-        data-color="blue"
-        data-customize="true"
-      >
-        <div className="image-container">
-          <Image layout="fill" objectFit="cover" src={zaloIcon} alt="" />
+
+      
+      <div className="zalo-share-button-wrapper">
+        <div
+          className="zalo-share-button"
+          data-href={url}
+          data-oaid="1026828826434252149"
+          data-layout="1"
+          data-color="blue"
+          data-customize="true"
+        >
+          <div className="image-container">
+            <Image layout="fill" objectFit="cover" src={zaloIcon} alt="" />
+          </div>
         </div>
       </div>
 

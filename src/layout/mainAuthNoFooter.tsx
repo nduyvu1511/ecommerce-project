@@ -9,7 +9,7 @@ import { App } from "./app"
 import { MainNoFooter } from "./noFooter"
 
 export const MainAuthLayoutNoFooter = ({ children }: LayoutProps) => {
-  const { token } = useSelector((state: RootState) => state.user)
+  const token = useSelector((state: RootState) => state.user.token)
   const router = useRouter()
   const dispatch = useDispatch()
   const { getUserInfo } = useAuth()

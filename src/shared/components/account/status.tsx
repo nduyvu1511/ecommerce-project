@@ -11,8 +11,6 @@ interface OrderStatusProps {
 }
 
 export const OrderStatus = ({ type, order }: OrderStatusProps) => {
-  const language = "vni"
-
   return (
     <>
       {isObjectHasValue(order) ? (
@@ -62,6 +60,25 @@ export const OrderStatus = ({ type, order }: OrderStatusProps) => {
                   <h3>Tình trạng thanh toán:</h3>
                   <p>{order.state_paid}</p>
                 </li>
+                {order?.code_delivery ? (
+                  <li className="order__status-summary-list-item">
+                    <h3>Mã đơn hàng:</h3>
+                    <p>{order.code_delivery}</p>
+                  </li>
+                ) : null}
+                {order?.url_tracking_delivery ? (
+                  <li className="order__status-summary-list-item">
+                    <h3>Link kiểm tra tình trạng đơn hàng:</h3>
+                    <a
+                      style={{ color: "blue" }}
+                      href={order.url_tracking_delivery}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {order.url_tracking_delivery}
+                    </a>
+                  </li>
+                ) : null}
               </ul>
             </div>
 

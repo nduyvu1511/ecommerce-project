@@ -54,6 +54,7 @@
       &-sub {
         padding: 0;
         border-bottom: 0;
+        margin-bottom: 20px;
       }
 
       .modal__product-sub {
@@ -64,154 +65,6 @@
 
       .star-wrapper {
         display: none;
-      }
-
-      .product__intro-shop {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        margin-bottom: 0;
-        height: 50px;
-        align-items: flex-end;
-        justify-content: flex-end;
-        flex-direction: row-reverse;
-        background-color: $white;
-        z-index: 200;
-        overflow: hidden;
-        flex-direction: row-reverse;
-
-        @include responsive(md-screen) {
-          height: 45px;
-          position: static;
-          border-top: 0;
-          overflow: unset;
-          justify-content: flex-start;
-          padding: 0;
-          margin-bottom: 2rem;
-          flex-direction: row;
-        }
-
-        @include responsive(lg-screen) {
-          margin-bottom: 3rem;
-        }
-
-        &-btn {
-          height: 100%;
-          max-width: unset;
-          flex: 2;
-          width: 100%;
-          display: none;
-
-          @include responsive(md-screen) {
-            flex: unset;
-            width: 200px;
-            display: flex;
-            border: 1px solid $danger;
-            color: $danger;
-            background-color: $danger-opacity;
-          }
-        }
-
-        & .product__intro-shop-cart-btn {
-          flex: 2;
-          cursor: pointer;
-          display: flex;
-          height: 100%;
-          border-radius: 0;
-          background-color: $danger;
-          font-size: 1.4rem;
-
-          @include responsive(md-screen) {
-            flex: unset;
-            margin-right: 0.8rem;
-            padding-inline: 2rem;
-            border-radius: 0.2rem;
-          }
-
-          & .product__intro-shop-btn {
-            pointer-events: none;
-            display: flex;
-            border-radius: 0;
-
-            @include responsive(md-screen) {
-              border-radius: 0.2rem;
-            }
-          }
-        }
-
-        &-chat-btn {
-          display: flex;
-          flex: 1;
-          height: 100%;
-          background-color: $primary-color-opacity;
-          @include flex-center;
-          color: $primary-color;
-          border-radius: 0;
-          outline: none;
-          padding-inline: 1.4rem;
-          border: none;
-
-          @include responsive(md-screen) {
-            margin-left: 1.4rem;
-            flex: unset;
-            border-radius: 0.2rem;
-            border: 1px solid $primary-color;
-          }
-
-          & svg {
-            margin-right: 0.6rem;
-            font-size: 1.6rem;
-          }
-
-          & span {
-            @include style-text(500, 1.4rem, 1.4rem, $primary-color);
-          }
-        }
-
-        &-btn-sm {
-          @include flex-center;
-          flex-direction: column;
-          flex: 1;
-          background-color: $primary-color;
-          border: 0;
-          height: 100%;
-          padding: 0.5rem;
-          color: $white;
-
-          & span {
-            margin-top: 0.6rem;
-            @include style-text(400, 1rem, 1.2rem, $white);
-            @include limit-line-text(1);
-          }
-
-          & svg {
-            font-size: 1.5rem;
-          }
-
-          @include responsive(md-screen) {
-            flex: unset;
-            border: 1px solid $primary-color;
-            color: $primary-color;
-            background-color: $white;
-            padding-inline: 1.6rem;
-            display: none;
-
-            & span {
-              color: $primary-color;
-            }
-
-            & svg {
-              font-size: 1.8rem;
-            }
-          }
-        }
-
-        &-cart-mobile {
-          @include responsive(md-screen) {
-            display: none;
-          }
-        }
       }
 
       & .product__intro-quantity {
@@ -264,6 +117,7 @@
 
           .modal__product-header {
             .modal__product-title {
+              margin-bottom: 20px;
               margin-right: 0;
             }
           }
@@ -272,6 +126,150 @@
             display: flex;
           }
         }
+      }
+    }
+  }
+
+  .product__intro-shop {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-bottom: 0;
+    height: 50px;
+    align-items: flex-end;
+    justify-content: flex-end;
+    flex-direction: row-reverse;
+    background-color: $white;
+    z-index: 200;
+    overflow: hidden;
+    flex-direction: row-reverse;
+
+    @include responsive(md-screen) {
+      height: 45px;
+      position: static;
+      border-top: 0;
+      overflow: unset;
+      justify-content: flex-start;
+      padding: 0;
+      flex-direction: row;
+      margin-bottom: 20px;
+    }
+
+    &-btn {
+      height: 100%;
+      max-width: unset;
+      flex: 2;
+      width: 100%;
+      display: none;
+
+      @include responsive(md-screen) {
+        flex: unset;
+        width: 200px;
+        display: flex;
+        border: 1px solid $danger;
+        color: $danger;
+        background-color: $danger-opacity;
+      }
+    }
+
+    & .product__intro-shop-cart-btn {
+      flex: 2;
+      cursor: pointer;
+      display: flex;
+      height: 100%;
+      border-radius: 0;
+      background-color: #3093ed;
+      font-size: 1.4rem;
+
+      @include responsive(md-screen) {
+        flex: unset;
+        margin-right: 0.8rem;
+        padding-inline: 2rem;
+        border-radius: 0.2rem;
+      }
+
+      & .product__intro-shop-btn {
+        pointer-events: none;
+        display: flex;
+        border-radius: 0;
+
+        @include responsive(md-screen) {
+          border-radius: 0.2rem;
+        }
+      }
+    }
+
+    &-chat-btn {
+      display: flex;
+      flex: 1;
+      height: 100%;
+      background-color: $primary-color-opacity;
+      @include flex-center;
+      color: $primary-color;
+      border-radius: 0;
+      outline: none;
+      padding-inline: 1.4rem;
+      border: none;
+
+      @include responsive(md-screen) {
+        margin-left: 1.4rem;
+        flex: unset;
+        border-radius: 0.2rem;
+        border: 1px solid $primary-color;
+      }
+
+      & svg {
+        margin-right: 0.6rem;
+        font-size: 1.6rem;
+      }
+
+      & span {
+        @include style-text(500, 1.4rem, 1.4rem, $primary-color);
+      }
+    }
+
+    &-btn-sm {
+      @include flex-center;
+      flex-direction: column;
+      flex: 1;
+      background-color: $primary-color;
+      border: 0;
+      height: 100%;
+      padding: 0.5rem;
+      color: $white;
+
+      & span {
+        margin-top: 0.6rem;
+        @include style-text(400, 1rem, 1.2rem, $white);
+        @include limit-line-text(1);
+      }
+
+      & svg {
+        font-size: 1.5rem;
+      }
+
+      @include responsive(md-screen) {
+        flex: unset;
+        border: 1px solid $primary-color;
+        color: $primary-color;
+        background-color: $white;
+        padding-inline: 1.6rem;
+        display: none;
+
+        & span {
+          color: $primary-color;
+        }
+
+        & svg {
+          font-size: 1.8rem;
+        }
+      }
+    }
+
+    &-cart-mobile {
+      @include responsive(md-screen) {
+        display: none;
       }
     }
   }

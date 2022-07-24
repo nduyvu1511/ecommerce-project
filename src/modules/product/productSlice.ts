@@ -1,4 +1,4 @@
-import { AttributeWithParentId, BooleanType, Product, ProductSlice } from "@/models"
+import { BooleanType, Product, ProductSlice } from "@/models"
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState: ProductSlice = {
@@ -19,16 +19,6 @@ const productSlice = createSlice({
       state.product = payload
     },
 
-    setAttributeList: (state, { payload }: { payload: AttributeWithParentId[] }) => {
-      state.listAttribute = payload
-    },
-
-    changeAttributeItem: (state, { payload }: { payload: AttributeWithParentId }) => {
-      state.listAttribute = state.listAttribute?.map((item) =>
-        item.parentId === payload.parentId ? payload : item
-      )
-    },
-
     toggleSearchResult: (state, { payload }: BooleanType) => {
       state.search.isOpen = payload
     },
@@ -45,11 +35,5 @@ const productSlice = createSlice({
 
 export default productSlice.reducer
 
-export const {
-  setProduct,
-  changeAttributeItem,
-  setAttributeList,
-  setKeyword,
-  setSearchingStatus,
-  toggleSearchResult,
-} = productSlice.actions
+export const { setProduct, setKeyword, setSearchingStatus, toggleSearchResult } =
+  productSlice.actions

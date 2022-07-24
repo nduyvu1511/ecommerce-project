@@ -40,7 +40,6 @@ const useCartOrder = (shouldFetch = false): UseCartOrderProps => {
   const { productList, orderDraft, address, delivery, payment, promotion, promotionLineList } =
     useSelector((state: RootState) => state.order)
   const { token } = useSelector((state: RootState) => state.user)
-
   const {
     data = [],
     isValidating,
@@ -80,9 +79,7 @@ const useCartOrder = (shouldFetch = false): UseCartOrderProps => {
 
   const getDiffCartsById = (cartIds: number[]): CartItem[] | undefined => {
     if (!productList || productList?.length === 0) return undefined
-
     const newCarts = [...productList].filter((item) => !cartIds.includes(item.stored_product_id))
-
     return newCarts?.length === 0 ? undefined : newCarts
   }
 

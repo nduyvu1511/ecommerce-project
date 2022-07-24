@@ -6,7 +6,6 @@ import messageSlice from "./chat/messageSlice"
 import chatModalSlice from "./chat/modalSlice"
 import commonSlice from "./common/commonSlice"
 import compareSlice from "./compare/compareSlice"
-import localeSlice from "./locale/localeSlice"
 import orderSlice from "./order/orderSlice"
 import productSlice from "./product/productSlice"
 import searchSlice from "./search/searchSlice"
@@ -20,7 +19,6 @@ const rootReducer = combineReducers({
   product: productSlice,
   auth: authSlice,
   search: searchSlice,
-  locale: localeSlice,
   channel: channelSlice,
   message: messageSlice,
   chatModal: chatModalSlice,
@@ -33,7 +31,6 @@ export * from "./auth/authSlice"
 export * from "./chat"
 export * from "./common/commonSlice"
 export * from "./compare/compareSlice"
-export * from "./locale/localeSlice"
 export * from "./order/orderSlice"
 export * from "./product/productSlice"
 export * from "./search/searchSlice"

@@ -10,8 +10,8 @@ import {
 import { Product } from "@/models"
 import {
   addProductCompare,
-  setProduct,
   setOpenModalProduct,
+  setProduct,
   toggleShowCompareModal,
 } from "@/modules"
 import { API_URL } from "@/services"
@@ -51,20 +51,14 @@ export const ProductItem = ({ product, isLoading }: IProductItem) => {
       {!isLoading && isObjectHasValue(product) ? (
         <div className="product__card">
           <div className="product__card__img">
-            {product?.daily_deal_promotion &&
-            getPercentageProductDeal(product) ? (
-              <span className="product__card-deal-label">
-                {getPercentageProductDeal(product)}%
-              </span>
+            {product?.daily_deal_promotion && getPercentageProductDeal(product) ? (
+              <span className="product__card-deal-label">{getPercentageProductDeal(product)}%</span>
             ) : null}
 
             {/* Show on hover: wishlist, compare, detail  */}
             <div className="product__card__sub">
               {!router.query.productId ? (
-                <button
-                  onClick={handleOpenModalProduct}
-                  className="product__card__sub-item"
-                >
+                <button onClick={handleOpenModalProduct} className="product__card__sub-item">
                   <IoExpandOutline />
                   <span
                     className="tool-tip"
@@ -79,10 +73,7 @@ export const ProductItem = ({ product, isLoading }: IProductItem) => {
 
               {/* <ButtonWishlist type="item" product={product} /> */}
 
-              <button
-                onClick={handleAddToCompareList}
-                className="product__card__sub-item"
-              >
+              <button onClick={handleAddToCompareList} className="product__card__sub-item">
                 <RiBarChartFill />
                 <span
                   className="tool-tip"
@@ -151,30 +142,11 @@ export const ProductItem = ({ product, isLoading }: IProductItem) => {
           <div className="product__card-body">
             <div className="product__card__content">
               <Link href={`/product/${product.product_tmpl_id}`} passHref>
-                <a className="product__card__content-title">
-                  {product.product_name}
-                </a>
+                <a className="product__card__content-title">{product.product_name}</a>
               </Link>
 
               <div className="product__card__content-rating">
-                <Star
-                  readonly
-                  size={15}
-                  ratingValue={product.star_rating * 20}
-                />
-
-                {/* <p
-                  className={`product__card__content-status ${
-                    !product.product_available
-                      ? "product__card__content-status-out-of-stock"
-                      : ""
-                  }`}
-                >
-                  {product.product_available ? "còn hàng" : "hết hàng"}
-                </p> */}
-                {/* <span className="product__card__content-rating-review">
-                  {product.product_available}
-                </span> */}
+                <Star readonly size={15} ratingValue={product.star_rating * 20} />
               </div>
 
               <p className="product__card__content-price">

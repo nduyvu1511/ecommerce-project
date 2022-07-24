@@ -3,7 +3,7 @@ import { StarEmptyIcon } from "@/assets"
 import { RootState } from "@/core/store"
 import { CommentRating, StarString } from "@/models"
 import { useRouter } from "next/router"
-import React, { useState } from "react"
+import { useState } from "react"
 import { AiFillStar, AiOutlineStar } from "react-icons/ai"
 import { RiLoader4Line } from "react-icons/ri"
 import { useSelector } from "react-redux"
@@ -32,11 +32,7 @@ export const Rating = () => {
     limit: LIMIT_RATING,
   })
   const {
-    data: {
-      detail_star_rating: ratingGroup = [],
-      rating_total = 0,
-      star_avg = 0,
-    } = { data: [] },
+    data: { detail_star_rating: ratingGroup = [], rating_total = 0, star_avg = 0 } = { data: [] },
     isValidating: isRatingGroupLoading,
   } = useStatisticalRating(product_id)
 
@@ -53,9 +49,7 @@ export const Rating = () => {
       },
       cb: () => {
         setOffset(_offset)
-        document
-          .querySelector(".product__rating")
-          ?.scrollIntoView({ behavior: "smooth" })
+        document.querySelector(".product__rating")?.scrollIntoView({ behavior: "smooth" })
       },
     })
   }
@@ -63,22 +57,16 @@ export const Rating = () => {
   const toggleStarCounts = (count: StarString) => {
     if (starCounts?.includes(count)) {
       const newStarCounts = [...starCounts].filter((item) => item !== count)
-      filterProductRatings(
-        { product_tmpl_id: product_id, star_ratings: newStarCounts },
-        () => {
-          setStarCounts(newStarCounts)
-          if (offset) setOffset(0)
-        }
-      )
+      filterProductRatings({ product_tmpl_id: product_id, star_ratings: newStarCounts }, () => {
+        setStarCounts(newStarCounts)
+        if (offset) setOffset(0)
+      })
     } else {
       const newStarCounts = [...starCounts, count]
-      filterProductRatings(
-        { product_tmpl_id: product_id, star_ratings: newStarCounts },
-        () => {
-          setStarCounts(newStarCounts)
-          if (offset) setOffset(0)
-        }
-      )
+      filterProductRatings({ product_tmpl_id: product_id, star_ratings: newStarCounts }, () => {
+        setStarCounts(newStarCounts)
+        if (offset) setOffset(0)
+      })
     }
   }
 
@@ -92,14 +80,10 @@ export const Rating = () => {
         <div className="product__rating-header-summary">
           <div className="product__rating-header-summary-info">
             <div className="product__rating-header-info">
-              <p className="product__rating-summary-count">
-                {product?.star_rating || 0}
-              </p>
+              <p className="product__rating-summary-count">{product?.star_rating || 0}</p>
               <div className="">
                 <Star readonly size={22} ratingValue={(star_avg || 0) * 20} />
-                <p className="product__rating-header-desc">
-                  {rating_total || 0} nhận xét
-                </p>
+                <p className="product__rating-header-desc">{rating_total || 0} nhận xét</p>
               </div>
             </div>
 
@@ -120,8 +104,6 @@ export const Rating = () => {
             </div>
           </div>
 
-          <div className="product__rating-header-summary-separate show-on-desktop"></div>
-
           <div className="product__rating-header-summary-filters">
             <ul className="rating__filter-list">
               {[5, 4, 3, 2, 1].map((number) => (
@@ -129,17 +111,11 @@ export const Rating = () => {
                   onClick={() => toggleStarCounts((number + "") as StarString)}
                   key={number}
                   className={`rating__filter-list-item ${
-                    isActive((number + "") as StarString)
-                      ? "rating__filter-list-item-active"
-                      : ""
+                    isActive((number + "") as StarString) ? "rating__filter-list-item-active" : ""
                   }`}
                 >
                   {number}
-                  {isActive((number + "") as StarString) ? (
-                    <AiFillStar />
-                  ) : (
-                    <AiOutlineStar />
-                  )}
+                  {isActive((number + "") as StarString) ? <AiFillStar /> : <AiOutlineStar />}
                 </li>
               ))}
             </ul>

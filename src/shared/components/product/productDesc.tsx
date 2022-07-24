@@ -1,12 +1,14 @@
+import { useRouter } from "next/router"
 import { useEffect, useRef, useState } from "react"
 
 export const ProductDesc = ({ desc }: { desc: string }) => {
+  const router = useRouter()
   const [show, setShow] = useState<boolean>(false)
   const height = useRef<number>(0)
 
   useEffect(() => {
     height.current = document.querySelector(".product__detail-desc-content")?.clientHeight || 0
-  }, [])
+  }, [router.query])
 
   return (
     <div className="product__detail-desc">

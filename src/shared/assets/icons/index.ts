@@ -1,5 +1,6 @@
 export * from "./spinnerIcon"
-export const logo = require("./logo.svg")
+export const logo = require("./logo-lg.png")
+export const logo2 = require("./logo-lg-2.png")
 export const googlePlayIcon = require("./google-play.png")
 export const appStoreIcon = require("./app-store.png")
 export const companyIcon = require("./company_logo.jpeg")

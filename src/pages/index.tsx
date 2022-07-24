@@ -22,10 +22,10 @@ const Home = () => {
   const { carts } = useCartOrder()
   const router = useRouter()
   const dispatch = useDispatch()
+  const { data: banners, isValidating: isBannerLoading } = useBanner()
   const { token, userInfo: { avatar = "" } = { userInfo: undefined } } = useSelector(
     (state: RootState) => state.user
   )
-  const { data: banners, isValidating: isBannerLoading } = useBanner()
 
   return (
     <>
@@ -37,6 +37,7 @@ const Home = () => {
         url={"https://womart.vn"}
         description="Womart Shop là mô hình bán lẻ trực tiếp D2C và B2B ( bán sỉ ) trực tiếp online kết hợp với các điểm dịch vụ offline nhằm loại bỏ các chi phí trung gian mang lại lợi thế giá rẻ cho người tiêu dùng"
       />
+
       <HeaderMobile
         showSearchInput
         rightChild={
@@ -135,7 +136,7 @@ const Home = () => {
       <div className="nav__mobile">
         <ul className="nav__mobile-list">
           {navMobileLinks.map((nav) => (
-            <li
+            <li 
               key={nav.id}
               onClick={() =>
                 nav.onClick ? dispatch(nav.onClick && nav.onClick(true)) : router.push(nav.id)

@@ -146,6 +146,8 @@ export interface OrderHistoryDetail {
   state_return_delivery: string
   state_return_paid: string
   type_product: string
+  code_delivery: string | false
+  url_tracking_delivery: string | false
 }
 
 export interface Wishlist {

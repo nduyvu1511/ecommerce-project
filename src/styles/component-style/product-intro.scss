@@ -101,7 +101,7 @@
   &-quantity {
     display: flex;
     align-items: center;
-    margin-bottom: 3rem;
+    margin-bottom: 20px;
 
     & .input__quantity {
       width: fit-content;
@@ -197,11 +197,11 @@
   }
 }
 
-.product__intro-horizontal {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
+// .product__intro-horizontal {
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: space-between;
+// }
 
 .product__intro-price {
   display: flex;

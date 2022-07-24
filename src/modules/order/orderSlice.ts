@@ -1,3 +1,4 @@
+import { RootState } from "@/core/store"
 import {
   CartItem,
   Delivery,
@@ -75,6 +76,15 @@ const OrderSlice = createSlice({
     },
   },
 })
+
+export const selectOrderAddress = (state: RootState) => state.order.address
+export const selectOrderDelivery = (state: RootState) => state.order.delivery
+export const selectOrderNote = (state: RootState) => state.order.note
+export const selectOrderDraft = (state: RootState) => state.order.orderDraft
+export const selectOrderPayment = (state: RootState) => state.order.payment
+export const selectOrderProductList = (state: RootState) => state.order.productList
+export const selectOrderPromotion = (state: RootState) => state.order.promotion
+export const selectOrderPromotionLineList = (state: RootState) => state.order.promotionLineList
 
 export default OrderSlice.reducer
 export const {

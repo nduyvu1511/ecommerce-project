@@ -8,10 +8,14 @@
   & .voucher__list {
     display: grid;
     grid-template-columns: 1fr;
-    grid-gap: 2rem;
+    grid-gap: 10px;
     @include responsive(md-screen) {
       grid-template-columns: 1fr 1fr;
     }
+  }
+
+  & .promotion__item {
+    margin-bottom: 0;
   }
 }
 

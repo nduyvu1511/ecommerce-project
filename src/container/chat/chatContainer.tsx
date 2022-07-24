@@ -9,7 +9,7 @@ import { useAuth } from "shared/hook"
 
 const ChatContainer = () => {
   const dispatch = useDispatch()
-  const { token } = useSelector((state: RootState) => state.user)
+  const token = useSelector((state: RootState) => state.user.token)
   const [isAuth, setAuth] = useState<boolean>(false)
   const { isExpandChatModal, isOpenChatDesktop, isOpenChatMobile } = useSelector(
     (state: RootState) => state.chatModal

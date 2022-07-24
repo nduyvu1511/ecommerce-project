@@ -24,9 +24,7 @@ export const correctEmail = (value: string) => {
 }
 
 export const correctPassword = (value: string) => {
-  return /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/.test(
-    value
-  )
+  return /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/.test(value)
 }
 
 export const isVietnamesePhoneNumberValid = (num: string) => {
@@ -79,11 +77,7 @@ export const FormatNumber = (money: number, separator = ",") => {
   return (money + "").replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1" + separator)
 }
 
-export const formatNumberDec = (
-  nStr: string,
-  decSeparate: string,
-  groupSeparate: string
-) => {
+export const formatNumberDec = (nStr: string, decSeparate: string, groupSeparate: string) => {
   nStr += ""
   let x = nStr.split(decSeparate)
   let x1 = x[0]
@@ -166,9 +160,7 @@ export function getFullAddress(address?: ShippingAddress): string {
   return `${address.street}, ${address.ward_id}, ${address.district_id}, ${address.state_id}.`
 }
 
-export function productListToObjectIdQuantity(
-  productList: CartItem[]
-): DraftProductList {
+export function productListToObjectIdQuantity(productList: CartItem[]): DraftProductList {
   if (productList?.length === 0) {
     return {}
   }
@@ -190,8 +182,7 @@ export function productListToObjectIdQuantity(
 
 export function isExistCart(obj1: ProductIds, obj2: ProductIds) {
   return (
-    obj1.product_tmpl_id === obj2.product_tmpl_id &&
-    obj1.product_prod_id === obj2.product_prod_id
+    obj1.product_tmpl_id === obj2.product_tmpl_id && obj1.product_prod_id === obj2.product_prod_id
   )
 }
 
@@ -227,8 +218,7 @@ export function getPercentageProductDeal(product: Product): number {
   const deal = product?.daily_deal_promotion
   if (deal && Object.keys(deal).length > 0) {
     if (deal.compute_price === "fixed") {
-      const percentage =
-        ((product.price - deal.fixed_price) / product.price) * 100
+      const percentage = ((product.price - deal.fixed_price) / product.price) * 100
 
       return percentage > 0 ? +percentage.toFixed(0) : 0
     }
@@ -242,9 +232,7 @@ export function getPercentageProductDeal(product: Product): number {
 }
 
 export function getProductId(product: Product): number {
-  return product.attributes.length > 0
-    ? product.product_tmpl_id
-    : product.product_prod_id
+  return product.attributes.length > 0 ? product.product_tmpl_id : product.product_prod_id
 }
 
 export const getFromLocalStorage: any = (key: string) => {
@@ -261,10 +249,7 @@ export const getFromLocalStorage: any = (key: string) => {
 export function getTotalPrice(productList: CartItem[]) {
   if (productList?.length === 0) return 0
 
-  return productList.reduce(
-    (prev, curr) => prev + curr.price_unit * curr.product_qty,
-    0
-  )
+  return productList.reduce((prev, curr) => prev + curr.price_unit * curr.product_qty, 0)
 }
 
 export const setToLocalStorage: any = (key: string, value: any) => {
@@ -318,10 +303,7 @@ export function mergeProductAndProductDetail({
   return {
     ...product,
     ...productDetail,
-    image_url:
-      productDetail.image_url?.length > 0
-        ? productDetail.image_url
-        : product.image_url,
+    image_url: productDetail.image_url?.length > 0 ? productDetail.image_url : product.image_url,
     price: productDetail.price,
     product_prod_id: productDetail.id,
     qty_available: productDetail.qty_available,

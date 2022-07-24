@@ -8,11 +8,7 @@ interface QuantityInput {
   disabled?: boolean
 }
 
-export const InputQuantity = ({
-  quantity,
-  onChangeQuantity,
-  disabled,
-}: QuantityInput) => {
+export const InputQuantity = ({ quantity, onChangeQuantity, disabled }: QuantityInput) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const [inputQuantity, setInputQuantity] = useState<number>(quantity)
   const [triggerName, setTriggerName] = useState<"input" | "button">()
@@ -61,9 +57,8 @@ export const InputQuantity = ({
 
   const updateQuantity = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-
     const re = /^[0-9\b]+$/
-
+    if (!re.test(value) || Number(value) === 0) return
     if (value === "" || re.test(value)) {
       setTriggerName("input")
       setInputQuantity(+value)
@@ -71,11 +66,7 @@ export const InputQuantity = ({
   }
 
   return (
-    <div
-      className={`input__quantity ${
-        disabled ? "input__quantity-disabled" : ""
-      }`}
-    >
+    <div className={`input__quantity ${disabled ? "input__quantity-disabled" : ""}`}>
       <button
         onClick={() => handleChangeQuantity("Descrease")}
         className={`input__quantity-btn input__quantity-minus ${

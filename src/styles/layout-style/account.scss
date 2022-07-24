@@ -131,6 +131,9 @@
           padding-inline: 2rem;
           margin-bottom: 0;
         }
+        @include responsive(xl-screen) {
+          width: 300px;
+        }
 
         &-wrapper {
           display: flex;

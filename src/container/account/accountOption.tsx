@@ -14,7 +14,7 @@ export const AccountOption = () => {
   const language = "vni"
   const dispatch = useDispatch()
   const router = useRouter()
-  const { userInfo } = useSelector((state: RootState) => state.user)
+  const userInfo = useSelector((state: RootState) => state.user.userInfo)
 
   return (
     <>

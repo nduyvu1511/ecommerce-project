@@ -95,10 +95,9 @@ export const Header = () => {
                   </div>
                 </div>
 
-                <div className="header__actions-right-tools-language">
+                {/* <div className="header__actions-right-tools-language">
                   <p>
                     <BiWorld />
-                    {/* {router.locale === "vi" ? "Tiếng Việt" : "English"} */}
                     Tiếng Việt
                   </p>
                   <IoChevronDownOutline />
@@ -109,7 +108,7 @@ export const Header = () => {
                       {router.locale === "vi" ? "Tiếng Việt" : "Vietnamese"}
                     </p>
                   </div>
-                </div>
+                </div> */}
 
                 {!token ? (
                   <div className="header__actions-right-tools-option">

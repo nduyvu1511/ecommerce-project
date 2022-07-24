@@ -20,17 +20,15 @@ export const OrderContainer = ({
   headerTitle,
 }: IOrderContainer) => {
   const dispatch = useDispatch()
-  const { productList } = useSelector((state: RootState) => state.order)
-  const { isOpenOrderSummary } = useSelector((state: RootState) => state.common)
+  const productList = useSelector((state: RootState) => state.order.productList)
+  const isOpenOrderSummary = useSelector((state: RootState) => state.common.isOpenOrderSummary)
 
   return (
     <>
       <HeaderMobile centerChild={<p>{headerTitle}</p>} />
 
       <section
-        className={`order__container ${
-          !isShowOrderSummary ? "order__container--no-margin" : ""
-        }`}
+        className={`order__container ${!isShowOrderSummary ? "order__container--no-margin" : ""}`}
       >
         <div className="container">
           <div className="order-wrapper">
@@ -46,10 +44,7 @@ export const OrderContainer = ({
               </div>
               {isShowOrderSummary && isArrayHasValue(productList) ? (
                 <div className="order__body-right">
-                  <CartSummary
-                    type="desktop"
-                    isShowPromotion={isShowPromotion}
-                  />
+                  <CartSummary type="desktop" isShowPromotion={isShowPromotion} />
                 </div>
               ) : null}
             </div>

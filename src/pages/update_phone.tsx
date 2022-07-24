@@ -11,8 +11,9 @@ const ResetPasswordPage = () => {
   const dispatch = useDispatch()
   const router = useRouter()
   const { createPassword } = usePassword()
-  const { isValidateCreatePasswordOTP, phoneNumber, currentToken } =
-    useSelector((state: RootState) => state.auth)
+  const { isValidateCreatePasswordOTP, phoneNumber, currentToken } = useSelector(
+    (state: RootState) => state.auth
+  )
   const { token } = useSelector((state: RootState) => state.user)
 
   useEffect(() => {
