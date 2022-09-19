@@ -18,19 +18,30 @@ import { API_URL } from "@/services"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
+import { BsCartPlus } from "react-icons/bs"
 import { IoExpandOutline } from "react-icons/io5"
-import { RiBarChartFill } from "react-icons/ri"
+import { RiBarChartFill, RiLoader4Fill, RiShoppingCart2Line } from "react-icons/ri"
 import { useDispatch } from "react-redux"
 import { Star } from "../star"
 
 interface IProductItem {
   product: Product
   isLoading?: boolean
+  onAddToCart?: (product: Product) => void
+  isAddingToCart?: boolean
 }
 
-export const ProductItem = ({ product, isLoading }: IProductItem) => {
+export const ProductItem = ({ product, isLoading, onAddToCart, isAddingToCart }: IProductItem) => {
   const dispatch = useDispatch()
   const router = useRouter()
+
+  const handleAddToCart = () => {
+    if (product.attributes?.length > 0) {
+      handleOpenModalProduct()
+    } else {
+      onAddToCart?.(product)
+    }
+  }
 
   const handleAddToCompareList = () => {
     dispatch(toggleShowCompareModal(true))
@@ -137,6 +148,17 @@ export const ProductItem = ({ product, isLoading }: IProductItem) => {
                 ) : null}
               </>
             )}
+
+            {onAddToCart ? (
+              <button
+                onClick={handleAddToCart}
+                className={`btn-reset product__card__img-cart-btn ${
+                  isAddingToCart ? "product__card__img-cart-btn-disabled" : ""
+                }`}
+              >
+                {isAddingToCart ? <RiLoader4Fill className="loader" /> : <BsCartPlus />}
+              </button>
+            ) : null}
           </div>
 
           <div className="product__card-body">

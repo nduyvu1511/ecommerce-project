@@ -21,7 +21,7 @@ export const createPasswordSchema = Yup.object().shape({
   newPassword: Yup.string()
     .min(6, "Mật khẩu phải có ít nhất 6 ký tự")
     .required("Vui lòng nhập mật khẩu"),
-  reNewPassword: Yup.string().oneOf(["newPassword"]),
+  reNewPassword: Yup.string().oneOf([Yup.ref("newPassword")]),
 })
 
 export const changePasswordSchema = Yup.object().shape({

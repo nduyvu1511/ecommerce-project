@@ -177,3 +177,5 @@ export const StarEmptyIcon = (
     </g>
   </svg>
 )
+
+export const thumbnailImage = require("./images/thumbnail.png")

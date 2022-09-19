@@ -10,13 +10,13 @@ import {
   setPromotionLineList,
 } from "@/modules"
 import cartApi, { AddToCartProps } from "@/services/cartApi"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { notify } from "reapop"
 import useSWR from "swr"
 import { usePromotion } from "./usePromotion"
 
-interface UseCartOrderProps {
+interface UseCartOrderRes {
   toggleEachInput: (cart: CartItem) => void
   toggleCheckAllCart: Function
   updateQuantity: (cart: CartItem, handleSuccess: Function, handleError?: Function) => void
@@ -32,14 +32,15 @@ interface UseCartOrderProps {
     callback?: Function,
     onError?: Function
   ) => void
+  currentProductLoading: number | undefined
 }
 
-const useCartOrder = (shouldFetch = false): UseCartOrderProps => {
+const useCartOrder = (shouldFetch = false): UseCartOrderRes => {
   const dispatch = useDispatch()
   const { cancelPromotion } = usePromotion(false)
   const { productList, orderDraft, address, delivery, payment, promotion, promotionLineList } =
     useSelector((state: RootState) => state.order)
-  const { token } = useSelector((state: RootState) => state.user)
+  const token = useSelector((state: RootState) => state.user.token)
   const {
     data = [],
     isValidating,
@@ -55,6 +56,8 @@ const useCartOrder = (shouldFetch = false): UseCartOrderProps => {
       dedupingInterval: 60,
     }
   )
+
+  const [currentProductLoading, setCurrentProductLoading] = useState<number | undefined>()
 
   const handleResetOrderField = () => {
     if (orderDraft) {
@@ -152,7 +155,9 @@ const useCartOrder = (shouldFetch = false): UseCartOrderProps => {
     if (!token) return
 
     try {
+      setCurrentProductLoading(cart.product_id)
       const res: any = await cartApi.addToCart(cart)
+      setCurrentProductLoading(undefined)
 
       if (res?.result?.success) {
         const newCart: CartItem = isObjectHasValue(res?.result?.data) ? res.result.data : null
@@ -188,6 +193,7 @@ const useCartOrder = (shouldFetch = false): UseCartOrderProps => {
         onError && onError()
       }
     } catch (error) {
+      setCurrentProductLoading(undefined)
       onError && onError()
     }
   }
@@ -233,7 +239,7 @@ const useCartOrder = (shouldFetch = false): UseCartOrderProps => {
 
   const totalMoney = useMemo(() => {
     return data?.length || 0 > 0
-      ? (data as CartItem[]).reduce((a, b) => b.price_unit_discount * b.product_qty + a, 0)
+      ? (data as CartItem[]).reduce((a, b) => b.price_unit * b.product_qty + a, 0)
       : 0
   }, [data])
 
@@ -248,6 +254,7 @@ const useCartOrder = (shouldFetch = false): UseCartOrderProps => {
     totalMoney,
     isValidating,
     addToCart,
+    currentProductLoading,
   }
 }
 

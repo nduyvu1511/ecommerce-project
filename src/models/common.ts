@@ -92,7 +92,7 @@ export interface BreadcrumbItem {
 
 export interface GetBannerParams {
   radio: string[]
-  type?: "slide" | "banner"
+  type?: "slide" | "banner" | "advertisement" | "background" | "category" | "advertisement" | "sale"
 }
 
 export type BannerAreaType = "topArea" | "bottomArea" | "centerArea"

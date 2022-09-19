@@ -1,34 +1,46 @@
 import {
-  Breadcrumb, HeaderMobile,
+  Breadcrumb,
+  HeaderMobile,
   Modal,
   ModalHeading,
   ProductItem,
   ProductItemLoading,
-  ShopFilter
+  ShopFilter,
 } from "@/components"
 import ProductFilter from "@/components/product/productFilter"
 import { RootState } from "@/core/store"
 import { isArrayHasValue, isObjectHasValue } from "@/helper"
 import { MainLayout } from "@/layout"
+import { Product } from "@/models"
 import { setOpenModalFilter } from "@/modules"
 import { useRouter } from "next/router"
 import React, { useEffect } from "react"
 import { FiFilter } from "react-icons/fi"
 import { useDispatch, useSelector } from "react-redux"
-import { useQueryProducts } from "shared/hook"
+import { useCartOrder, useQueryProducts } from "shared/hook"
 
 const ProductList = () => {
   const router = useRouter()
-  const { isOpenModalFilter } = useSelector((state: RootState) => state.common)
   const dispatch = useDispatch()
-  const {
-    products,
-    handleFilter,
-    handleChangePage,
-    isFetching,
-    isLimit,
-    isLoadingMore,
-  } = useQueryProducts()
+  const { isOpenModalFilter } = useSelector((state: RootState) => state.common)
+  const token = useSelector((state: RootState) => state.user.token)
+  const { addToCart, currentProductLoading } = useCartOrder(false)
+
+  const handleAddToCart = (product: Product) => {
+    addToCart(
+      {
+        product_id: product.product_prod_id,
+        product_qty: 1,
+        token,
+        uom_id: product.uom.id,
+        offer_pricelist: false,
+      },
+      true
+    )
+  }
+
+  const { products, handleFilter, handleChangePage, isFetching, isLimit, isLoadingMore } =
+    useQueryProducts()
 
   useEffect(() => {
     if (!isObjectHasValue(router.query)) return
@@ -50,9 +62,7 @@ const ProductList = () => {
       />
       <section className="product__list">
         <div className="container">
-          <Breadcrumb
-            breadcrumbList={[{ name: "Danh sách sản phẩm", path: "/" }]}
-          />
+          <Breadcrumb breadcrumbList={[{ name: "Danh sách sản phẩm", path: "/" }]} />
 
           <ProductFilter />
 
@@ -62,15 +72,18 @@ const ProductList = () => {
               grid-col-1024-5 grid-col-xl-6`}
             >
               {isFetching
-                ? Array.from({ length: 24 }).map((_, index) => (
-                    <ProductItemLoading key={index} />
-                  ))
+                ? Array.from({ length: 24 }).map((_, index) => <ProductItemLoading key={index} />)
                 : null}
 
               {!isFetching &&
                 products?.length > 0 &&
                 products.map((product, index) => (
-                  <ProductItem key={index} product={product} />
+                  <ProductItem
+                    onAddToCart={handleAddToCart}
+                    isAddingToCart={currentProductLoading === product.product_prod_id}
+                    key={index}
+                    product={product}
+                  />
                 ))}
             </div>
 

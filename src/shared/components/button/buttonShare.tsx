@@ -1,9 +1,10 @@
+/* eslint-disable @next/next/inline-script-id */
+/* eslint-disable @next/next/no-sync-scripts */
 import { zaloIcon } from "@/assets"
 import { DOMAIN_URL } from "@/services"
 import Head from "next/head"
 import Image from "next/image"
 import Script from "next/script"
-import { useState } from "react"
 import { BsMessenger, BsTwitter } from "react-icons/bs"
 import { FaFacebookF } from "react-icons/fa"
 import { RiWhatsappLine } from "react-icons/ri"
@@ -36,12 +37,11 @@ const ButtonShare = ({ name, description, imageUrl, product_id }: IButtonShare) 
         <FaFacebookF />
       </FacebookShareButton>
 
-      
       <div className="zalo-share-button-wrapper">
         <div
           className="zalo-share-button"
           data-href={url}
-          data-oaid="1026828826434252149"
+          data-oaid={process.env.NEXT_PUBLIC_ZALO_OAID}
           data-layout="1"
           data-color="blue"
           data-customize="true"

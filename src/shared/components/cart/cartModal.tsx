@@ -10,8 +10,7 @@ import { CartItem } from "./cartItem"
 export const CartModal = () => {
   const dispatch = useDispatch()
   const language = "vni"
-  const { deleteCartItem, carts, totalMoney, isValidating } =
-    useCartOrder(false)
+  const { deleteCartItem, carts, totalMoney, isValidating } = useCartOrder(false)
 
   const handleCloseModal = () => {
     dispatch(setOpenCartModal(false))
@@ -69,9 +68,7 @@ export const CartModal = () => {
         <div className="cart__modal-empty">
           {cartEmptyIcon}
           <p className="cart__modal-empty-title">
-            {language === "vni"
-              ? "Không có sản phẩm nào trong giỏ hàng"
-              : "No products in cart"}
+            {language === "vni" ? "Không có sản phẩm nào trong giỏ hàng" : "No products in cart"}
           </p>
         </div>
       ) : null}

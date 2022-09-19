@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
-import { filterNotFound } from "@/assets"
+import { filterNotFound, thumbnailImage } from "@/assets"
 import {
   BoxGridLoading,
   Breadcrumb,
@@ -8,8 +8,7 @@ import {
   HeaderMobile,
   Modal,
   ModalHeading,
-  ProductItem,
-  ProductItemList,
+  ProductCategory,
   ProductItemLoading,
   Seo,
   ShopFilter,
@@ -44,10 +43,10 @@ interface CategoryProps {
 const ProductList = ({ products, category }: CategoryProps) => {
   const router = useRouter()
   const dispatch = useDispatch()
+  const isOpenModalFilter = useSelector((state: RootState) => state.common.isOpenModalFilter)
+
   const offset = Number(router.query?.offset) || 0
   const limit = Number(router.query?.limit) || DEFAULT_LIMIT_PRODUCT
-  const language = "vni"
-  const { isOpenModalFilter } = useSelector((state: RootState) => state.common)
 
   const {
     products: productList,
@@ -187,27 +186,12 @@ const ProductList = ({ products, category }: CategoryProps) => {
       />
 
       {/* Product list */}
-      <div
-        className={`product__list-container grid ${
-          currentListView === 1 ? "" : `grid-col-2 grid-col-sm-3 grid-col-lg-3`
-        } grid-col-xl-${currentListView}`}
-      >
-        {/* {!isLoading && isObjectHasValue(products) ? */}
-        {isArrayHasValue(productList) && !isFetching ? (
-          <>
-            {currentListView === 1
-              ? productList.map((product, index) => (
-                  <ProductItemList key={index} product={product} />
-                ))
-              : productList.map((product, index) => <ProductItem key={index} product={product} />)}
-          </>
-        ) : null}
-
-        {/* Show when product status is fetching and has no data */}
-        {isFetching
-          ? Array.from({ length: 24 }).map((_, index) => <ProductItemLoading key={index} />)
-          : null}
-      </div>
+      <ProductCategory
+        data={productList}
+        gridView={currentListView}
+        isLoading={isFetching}
+        key="product-list"
+      />
 
       {!isArrayHasValue(productList) && (!isFetching || !isLoadingMore) ? (
         <div className="shop__products--not-found">
@@ -221,6 +205,7 @@ const ProductList = ({ products, category }: CategoryProps) => {
 
       {!isLimit && isArrayHasValue(products) ? (
         <button
+          style={{ pointerEvents: isLoadingMore ? "none" : "auto" }}
           onClick={() => handleChangePage()}
           className="btn-primary-outline shop__pagination-btn"
         >
@@ -234,10 +219,7 @@ const ProductList = ({ products, category }: CategoryProps) => {
     <>
       <Seo
         title={category?.parent_category?.[0]?.name || "Danh mục sản phẩm"}
-        thumbnailUrl={
-          category?.parent_category?.[0]?.image + "" ||
-          "https://scontent.fsgn2-1.fna.fbcdn.net/v/t39.30808-6/212711279_266812501879715_2497633353306262097_n.png?stp=c127.0.757.395a_dst-jpg_p526x395&_nc_cat=105&ccb=1-7&_nc_sid=e3f864&_nc_ohc=M7bK8QeQxhwAX-ZFxcG&_nc_ht=scontent.fsgn2-1.fna&oh=00_AT-LfkFpjPdTONGSnbub0O9Cj6Wnvp1QIPz_UKqL8gqiNg&oe=62D8B90E"
-        }
+        thumbnailUrl={thumbnailImage}
         url={`https://womart.vn/category/${category?.parent_category?.[0]?.id}`}
         description={category?.parent_category?.[0]?.name || "Danh mục sản phẩm"}
       />
@@ -275,7 +257,7 @@ const ProductList = ({ products, category }: CategoryProps) => {
           >
             <ModalHeading
               handleClose={() => dispatch(setOpenModalFilter(false))}
-              title={`${language === "vni" ? "Lọc sản phẩm" : "Filter products"} `}
+              title="Lọc sản phẩm"
             />
             <ShopFilter isCloseModal={true} categories={category?.child_category || []} />
           </Modal>

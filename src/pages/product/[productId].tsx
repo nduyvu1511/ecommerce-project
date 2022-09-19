@@ -1,3 +1,4 @@
+import { thumbnailImage } from "@/assets"
 import {
   Breadcrumb,
   HeaderMobile,
@@ -21,7 +22,6 @@ import { setOpenCartModal, setProduct } from "@/modules"
 import productApi from "@/services/productApi"
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next"
 import { useRouter } from "next/router"
-import Script from "next/script"
 import { useEffect, useRef, useState } from "react"
 import { BiCart } from "react-icons/bi"
 import { useDispatch, useSelector } from "react-redux"
@@ -149,10 +149,7 @@ const ProductDetailPage = ({ product: productProps }: ProduductDetailPageProps) 
     <>
       <Seo
         title={product?.name || ""}
-        thumbnailUrl={
-          product?.image_url?.[0] ||
-          "https://scontent.fsgn2-1.fna.fbcdn.net/v/t39.30808-6/212711279_266812501879715_2497633353306262097_n.png?stp=c127.0.757.395a_dst-jpg_p526x395&_nc_cat=105&ccb=1-7&_nc_sid=e3f864&_nc_ohc=M7bK8QeQxhwAX-ZFxcG&_nc_ht=scontent.fsgn2-1.fna&oh=00_AT-LfkFpjPdTONGSnbub0O9Cj6Wnvp1QIPz_UKqL8gqiNg&oe=62D8B90E"
-        }
+        thumbnailUrl={product?.image_url?.[0] || thumbnailImage}
         url={`https://womart.vn/product/${product?.product_tmpl_id || ""}`}
         description={product?.name || ""}
       />

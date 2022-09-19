@@ -43,6 +43,7 @@ export const Footer = () => {
                 { path: "/phuong-thuc-van-chuyen", label: "Phương thức vận chuyển" },
                 { path: "/chinh-sach-bao-mat", label: "Chính sách bảo mật" },
                 { path: "/chinh-sach-doi-tra", label: "Chính sách đổi trả" },
+                { path: "/dang-ky-phan-phoi-voi-womart", label: "Đăng Ký Phân Phối với Womart" },
                 // { path: "/chinh-sach-tra-gop", label: "Chính sách trả góp" },
                 { path: "/cau-hoi-thuong-gap", label: "Câu hỏi thường gặp" },
               ].map(({ label, path }, index) => (

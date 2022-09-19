@@ -1,8 +1,6 @@
 import { isObjectHasValue } from "@/helper"
 import { Product, ProductSale as IProductSale } from "@/models"
-import Link from "next/link"
 import { useEffect } from "react"
-import { CgArrowLongRight } from "react-icons/cg"
 import { useCountdown } from "shared/hook"
 import { Navigation } from "swiper"
 import "swiper/css"
@@ -16,12 +14,16 @@ interface ProductSaleItemProps {
   productSale: IProductSale
   isLoading: boolean
   setProductsSale: Function
+  onAddToCart?: (product: Product) => void
+  currentProductLoading?: number
 }
 
 export const ProductSaleItem = ({
   productSale,
   isLoading,
   setProductsSale,
+  currentProductLoading,
+  onAddToCart,
 }: ProductSaleItemProps) => {
   const language = "vni"
 
@@ -87,7 +89,12 @@ export const ProductSaleItem = ({
             {productSale?.product_promotion?.length > 0 &&
               productSale.product_promotion.map((product: Product, index) => (
                 <SwiperSlide key={index}>
-                  <ProductItem isLoading={isLoading} product={product} />
+                  <ProductItem
+                    isAddingToCart={currentProductLoading === product.product_prod_id}
+                    onAddToCart={onAddToCart}
+                    isLoading={isLoading}
+                    product={product}
+                  />
                 </SwiperSlide>
               ))}
           </Swiper>

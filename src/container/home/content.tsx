@@ -1,6 +1,9 @@
 import { ProductItem, ProductItemLoading } from "@/components"
+import { RootState } from "@/core/store"
 import { isArrayHasValue } from "@/helper"
-import { useProduct } from "shared/hook"
+import { Product } from "@/models"
+import { useSelector } from "react-redux"
+import { useCartOrder, useProduct } from "shared/hook"
 import { HomeSlideProduct } from "./homeSlide"
 
 export const MainContent = () => {
@@ -12,6 +15,21 @@ export const MainContent = () => {
     key: "products",
     params: { type_get: "new", limit: 12, offset: 2 },
   })
+  const token = useSelector((state: RootState) => state.user.token)
+  const { addToCart, currentProductLoading } = useCartOrder(false)
+
+  const handleAddToCart = (product: Product) => {
+    addToCart(
+      {
+        product_id: product.product_prod_id,
+        product_qty: 1,
+        token,
+        uom_id: product.uom.id,
+        offer_pricelist: false,
+      },
+      true
+    )
+  }
 
   return (
     <section className="home__content">
@@ -27,7 +45,13 @@ export const MainContent = () => {
               ? topProducts
                   .slice(0, 12)
                   .map((product, index) => (
-                    <ProductItem isLoading={isTopLoading} key={index} product={product} />
+                    <ProductItem
+                      isAddingToCart={currentProductLoading === product.product_prod_id}
+                      onAddToCart={handleAddToCart}
+                      isLoading={isTopLoading}
+                      key={index}
+                      product={product}
+                    />
                   ))
               : Array.from({ length: 12 }).map((_, index) => <ProductItemLoading key={index} />)}
           </div>
@@ -44,7 +68,13 @@ export const MainContent = () => {
               ? newProducts
                   .slice(0, 12)
                   .map((product, index) => (
-                    <ProductItem isLoading={isTopLoading} key={index} product={product} />
+                    <ProductItem
+                      isAddingToCart={currentProductLoading === product.product_prod_id}
+                      onAddToCart={handleAddToCart}
+                      isLoading={isTopLoading}
+                      key={index}
+                      product={product}
+                    />
                   ))
               : Array.from({ length: 12 }).map((_, index) => <ProductItemLoading key={index} />)}
           </div>

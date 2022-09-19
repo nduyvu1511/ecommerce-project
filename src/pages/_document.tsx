@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/next-script-for-ga */
 /* eslint-disable @next/next/no-sync-scripts */
 import Document, { Head, Html, Main, NextScript } from "next/document"
 // eslint-disable-next-line @next/next/no-script-in-document
@@ -18,21 +19,20 @@ class MyDocument extends Document {
           <link rel="shortcut icon" href="/logo.ico" />
         </Head>
 
+        <div className="embed-container">
+          <div
+            className="zalo-chat-widget"
+            data-oaid="1026828826434252149"
+            data-welcome-message="Rất vui khi được hỗ trợ bạn!"
+            data-autopopup="0"
+            data-width=""
+            data-height=""
+          ></div>
+        </div>
+
         <body>
           <Main />
-          <div className="embed-container">
-            <div
-              className="zalo-chat-widget"
-              data-oaid="1026828826434252149"
-              data-welcome-message="Rất vui khi được hỗ trợ bạn!"
-              data-autopopup="0"
-              data-width=""
-              data-height=""
-            ></div>
-          </div>
-
           <script src="https://sp.zalo.me/plugins/sdk.js" />
-
           <NextScript />
         </body>
       </Html>
